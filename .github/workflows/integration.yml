@@ -1,0 +1,139 @@
+name: PR Validation
+
+on:
+  pull_request:
+    branches: [ main ]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  validate:
+    name: Tests and Coverage
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Configurar Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.4'
+          channel: 'stable'
+
+      - name: Instalar dependencias
+        run: flutter pub get
+
+      - name: Analizar código
+        run: flutter analyze --fatal-infos
+
+      - name: Verificar formato de código
+        run: dart format --set-exit-if-changed .
+
+      - name: Ejecutar tests unitarios con coverage
+        run: flutter test --coverage
+
+      - name: Instalar lcov
+        run: sudo apt-get update && sudo apt-get install -y lcov
+
+      - name: Generar reporte de coverage HTML
+        run: |
+          genhtml coverage/lcov.info -o coverage/html
+          lcov --list coverage/lcov.info
+
+      - name: Verificar coverage mínimo del 80%
+        run: |
+          # Extraer el coverage total
+          total_coverage=$(lcov --summary coverage/lcov.info | grep "lines......:" | awk '{print $2}' | sed 's/%//')
+          echo "Coverage total: ${total_coverage}%"
+          
+          # Verificar coverage por archivo (mínimo 80%)
+          echo "Verificando coverage por archivo..."
+          
+          # Crear script para verificar coverage por archivo
+          cat > check_coverage.sh << 'EOF'
+          #!/bin/bash
+          
+          COVERAGE_FILE="coverage/lcov.info"
+          MIN_COVERAGE=80
+          FAILED_FILES=""
+          
+          # Leer archivo lcov y extraer información por archivo
+          current_file=""
+          lines_found=0
+          lines_hit=0
+          
+          while IFS= read -r line; do
+            if [[ $line == SF:* ]]; then
+              # Si ya había un archivo procesado, verificar su coverage
+              if [[ -n "$current_file" ]] && [[ $lines_found -gt 0 ]]; then
+                coverage=$(awk "BEGIN {printf \"%.1f\", ($lines_hit / $lines_found) * 100}")
+                
+                # Ignorar archivos generados y de prueba
+                if [[ ! $current_file =~ \.g\.dart$ ]] && \
+                   [[ ! $current_file =~ \.freezed\.dart$ ]] && \
+                   [[ ! $current_file =~ _test\.dart$ ]] && \
+                   [[ ! $current_file =~ /test/ ]]; then
+                  
+                  echo "  $current_file: ${coverage}%"
+                  
+                  if (( $(echo "$coverage < $MIN_COVERAGE" | bc -l) )); then
+                    FAILED_FILES="${FAILED_FILES}\n  ❌ $current_file: ${coverage}% (mínimo: ${MIN_COVERAGE}%)"
+                  fi
+                fi
+              fi
+              
+              # Nuevo archivo
+              current_file=$(echo "$line" | sed 's/SF://')
+              lines_found=0
+              lines_hit=0
+              
+            elif [[ $line == LF:* ]]; then
+              lines_found=$(echo "$line" | sed 's/LF://')
+            elif [[ $line == LH:* ]]; then
+              lines_hit=$(echo "$line" | sed 's/LH://')
+            fi
+          done < "$COVERAGE_FILE"
+          
+          # Verificar el último archivo
+          if [[ -n "$current_file" ]] && [[ $lines_found -gt 0 ]]; then
+            coverage=$(awk "BEGIN {printf \"%.1f\", ($lines_hit / $lines_found) * 100}")
+            
+            if [[ ! $current_file =~ \.g\.dart$ ]] && \
+               [[ ! $current_file =~ \.freezed\.dart$ ]] && \
+               [[ ! $current_file =~ _test\.dart$ ]] && \
+               [[ ! $current_file =~ /test/ ]]; then
+              
+              echo "  $current_file: ${coverage}%"
+              
+              if (( $(echo "$coverage < $MIN_COVERAGE" | bc -l) )); then
+                FAILED_FILES="${FAILED_FILES}\n  ❌ $current_file: ${coverage}% (mínimo: ${MIN_COVERAGE}%)"
+              fi
+            fi
+          fi
+          
+          if [[ -n "$FAILED_FILES" ]]; then
+            echo ""
+            echo "❌ Los siguientes archivos no cumplen con el coverage mínimo del ${MIN_COVERAGE}%:"
+            echo -e "$FAILED_FILES"
+            exit 1
+          else
+            echo ""
+            echo "✅ Todos los archivos cumplen con el coverage mínimo del ${MIN_COVERAGE}%"
+          fi
+          EOF
+          
+          chmod +x check_coverage.sh
+          ./check_coverage.sh
+
+      - name: Subir reporte de coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/html/
