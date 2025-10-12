@@ -1,0 +1,119 @@
+name: Deploy to Firebase in QA
+
+on:
+  push:
+    tags:
+      - '*.*.*-alpha*'
+
+jobs:
+  deploy-android:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configurar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Configurar Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.4'
+          channel: 'stable'
+
+      - name: Instalar dependencias
+        run: flutter pub get
+
+      - name: Ejecutar tests (validación final)
+        run: flutter test --coverage
+
+      - name: Obtener información del commit y tag
+        id: commit_info
+        run: |
+          {
+            echo "sha_short=$(git rev-parse --short HEAD)"
+            echo "commit_message=$(git log -1 --pretty=%B | head -n 1)"
+            echo "author=$(git log -1 --pretty=%an)"
+            echo "date=$(date +'%Y-%m-%d %H:%M')"
+            echo "tag=${GITHUB_REF#refs/tags/}"
+            # Extraer versión removiendo prefijo 'v' si existe
+            VERSION_TAG=${GITHUB_REF#refs/tags/}
+            if [[ $VERSION_TAG == v* ]]; then
+              echo "version=${VERSION_TAG#v}"
+            else
+              echo "version=$VERSION_TAG"
+            fi
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Build APK de producción
+        run: flutter build apk --release
+
+      - name: Build App Bundle
+        run: flutter build appbundle --release
+
+      - name: Verificar build y renombrar APK
+        run: |
+          echo "=== Verificando estructura de directorios ==="
+          ls -la build/app/outputs/ || echo "No existe build/app/outputs/"
+          ls -la build/app/outputs/flutter-apk/ || echo "No existe build/app/outputs/flutter-apk/"
+          
+          echo ""
+          echo "=== Información del tag ==="
+          echo "Tag completo: ${{ steps.commit_info.outputs.tag }}"
+          echo "Versión: ${{ steps.commit_info.outputs.version }}"
+          
+          echo ""
+          echo "=== Renombrando APK ==="
+          VERSION=${{ steps.commit_info.outputs.version }}
+          
+          if [ -f "build/app/outputs/flutter-apk/app-release.apk" ]; then
+            cp build/app/outputs/flutter-apk/app-release.apk \
+               build/app/outputs/flutter-apk/app-v${VERSION}.apk
+            echo "✅ APK copiado exitosamente"
+            ls -lh build/app/outputs/flutter-apk/
+          else
+            echo "❌ ERROR: No se encontró app-release.apk"
+            exit 1
+          fi
+
+      - name: Instalar Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Distribuir APK a Firebase App Distribution
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_APP_ID_ANDROID: ${{ secrets.FIREBASE_APP_ID_ANDROID }}
+        run: |
+          firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk \
+            --app "$FIREBASE_APP_ID_ANDROID" \
+            --groups "testers" \
+            --release-notes "🚀 Release ${{ steps.commit_info.outputs.tag }}
+          
+          📝 Commit: ${{ steps.commit_info.outputs.commit_message }}
+          👤 Autor: ${{ steps.commit_info.outputs.author }}
+          🔖 Versión: ${{ steps.commit_info.outputs.version }}
+          📅 Fecha: ${{ steps.commit_info.outputs.date }}
+          
+          Ver cambios: https://github.com/${{ github.repository }}/releases/tag/${{ steps.commit_info.outputs.tag }}"
+
+      - name: Subir artefactos Android
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-release-builds
+          path: |
+            build/app/outputs/flutter-apk/*.apk
+            build/app/outputs/bundle/release/*.aab
+          retention-days: 30
+
+      - name: Notificar éxito Android
+        if: success()
+        run: |
+          echo "✅ Deploy Android exitoso a Firebase App Distribution"
+          echo "📦 APK distribuido al grupo 'testers'"
+          echo "🔗 Los testers recibirán una notificación por email"
