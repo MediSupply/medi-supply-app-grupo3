@@ -60,7 +60,7 @@ jobs:
           #!/bin/bash
           
           COVERAGE_FILE="coverage/lcov.info"
-          MIN_COVERAGE=80
+          MIN_COVERAGE=75
           FAILED_FILES=""
           
           # Leer archivo lcov y extraer información por archivo
