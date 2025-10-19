@@ -14,6 +14,7 @@ UserDto _$UserDtoFromJson(Map<String, dynamic> json) => UserDto(
   phone: json['phone'] as String,
   email: json['email'] as String,
   password: json['password'] as String,
+  role: $enumDecode(_$RoleDtoEnumMap, json['role']),
 );
 
 Map<String, dynamic> _$UserDtoToJson(UserDto instance) => <String, dynamic>{
@@ -24,4 +25,7 @@ Map<String, dynamic> _$UserDtoToJson(UserDto instance) => <String, dynamic>{
   'phone': instance.phone,
   'email': instance.email,
   'password': instance.password,
+  'role': _$RoleDtoEnumMap[instance.role]!,
 };
+
+const _$RoleDtoEnumMap = {RoleDto.ADMIN: 'ADMIN', RoleDto.USER: 'USER'};

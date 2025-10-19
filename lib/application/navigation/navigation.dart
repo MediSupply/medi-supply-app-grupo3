@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../presentation/home/view/home_view.dart';
 import '../../presentation/login/view/login_view.dart';
+import '../../presentation/register/view/register_view.dart';
 import '../../presentation/splash_screen/view/splash_screen_view.dart';
 
 class MediSupplyNavigation {
@@ -27,7 +28,7 @@ class MediSupplyNavigation {
       GoRoute(
         path: _registerScreen,
         name: _registerScreen,
-        builder: (context, state) => throw UnimplementedError(),
+        builder: (context, state) => RegisterView(),
       ),
       GoRoute(
         path: _homeScreen,

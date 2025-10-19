@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:medi_supply_app_grupo3/data/data_source/dto/user/user_dto.dart';
 import 'package:mockito/mockito.dart';
 import 'package:dio/dio.dart';
 import 'package:medi_supply_app_grupo3/data/data_source/remote/auth/auth_data_source_remote.dart';
@@ -52,11 +53,16 @@ void main() {
     group('register', () {
       test('should handle register with user data', () async {
         // Arrange
-        const userData = {
-          'email': 'test@example.com',
-          'password': 'password123',
-          'name': 'Test User',
-        };
+        final userData = UserDto(
+          email: 'test@example.com',
+          password: 'password123',
+          name: 'Test User',
+          documentType: 'CC',
+          documentNumber: 1234567890,
+          address: 'Test Address',
+          phone: 'Test Phone',
+          role: RoleDto.USER,
+        );
 
         // Act
         final result = await authDataSourceRemote.register(userData);

@@ -11,14 +11,18 @@ import 'package:medi_supply_app_grupo3/data/data_source/dto/session/session_dto.
     as _i6;
 import 'package:medi_supply_app_grupo3/data/data_source/dto/user/user_credentials_dto.dart'
     as _i7;
+import 'package:medi_supply_app_grupo3/data/data_source/dto/user/user_dto.dart'
+    as _i9;
 import 'package:medi_supply_app_grupo3/data/data_source/remote/auth/auth_data_source_remote_interface.dart'
     as _i3;
 import 'package:medi_supply_app_grupo3/data/repository/entity/session/session.dart'
     as _i2;
+import 'package:medi_supply_app_grupo3/data/repository/entity/user/user.dart'
+    as _i12;
 import 'package:medi_supply_app_grupo3/data/repository/entity/user/user_credentials.dart'
-    as _i10;
+    as _i11;
 import 'package:medi_supply_app_grupo3/data/repository/remote/auth/auth_repository_remote_interface.dart'
-    as _i9;
+    as _i10;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i8;
 
@@ -67,9 +71,7 @@ class MockAuthDataSourceRemoteInterface extends _i1.Mock
           as _i4.Future<_i5.ApiResponse<_i6.SessionDto>>);
 
   @override
-  _i4.Future<_i5.ApiResponse<_i6.SessionDto>> register(
-    Map<String, dynamic>? user,
-  ) =>
+  _i4.Future<_i5.ApiResponse<_i6.SessionDto>> register(_i9.UserDto? user) =>
       (super.noSuchMethod(
             Invocation.method(#register, [user]),
             returnValue: _i4.Future<_i5.ApiResponse<_i6.SessionDto>>.value(
@@ -86,13 +88,13 @@ class MockAuthDataSourceRemoteInterface extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockAuthRepositoryRemoteInterface extends _i1.Mock
-    implements _i9.AuthRepositoryRemoteInterface {
+    implements _i10.AuthRepositoryRemoteInterface {
   MockAuthRepositoryRemoteInterface() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<_i2.Session> login(_i10.UserCredentials? userCredentials) =>
+  _i4.Future<_i2.Session> login(_i11.UserCredentials? userCredentials) =>
       (super.noSuchMethod(
             Invocation.method(#login, [userCredentials]),
             returnValue: _i4.Future<_i2.Session>.value(
@@ -105,7 +107,7 @@ class MockAuthRepositoryRemoteInterface extends _i1.Mock
           as _i4.Future<_i2.Session>);
 
   @override
-  _i4.Future<_i2.Session> register(Map<String, dynamic>? user) =>
+  _i4.Future<_i2.Session> register(_i12.User? user) =>
       (super.noSuchMethod(
             Invocation.method(#register, [user]),
             returnValue: _i4.Future<_i2.Session>.value(

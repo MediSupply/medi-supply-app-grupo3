@@ -3,6 +3,7 @@ import 'package:medi_supply_app_grupo3/data/data_source/dto/user/user_credential
 import 'package:retrofit/retrofit.dart';
 
 import '../../data_source/dto/session/session_dto.dart';
+import '../../data_source/dto/user/user_dto.dart';
 
 part 'auth_service.g.dart';
 
@@ -15,6 +16,6 @@ abstract interface class AuthService {
     @Body() required UserCredentialsDto userCredentials,
   });
 
-  @POST('/auth/register')
-  Future<SessionDto> register({@Body() required Map<String, dynamic> user});
+  @POST('/auth/signup')
+  Future<SessionDto> register({@Body() required UserDto user});
 }
