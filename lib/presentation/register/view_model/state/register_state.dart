@@ -12,11 +12,7 @@ class RegisterState {
     this.isLoading = false,
   });
 
-  RegisterState copyWith({
-    User? user,
-    Session? session,
-    bool? isLoading,
-  }) {
+  RegisterState copyWith({User? user, Session? session, bool? isLoading}) {
     return RegisterState(
       user: user ?? this.user,
       session: session ?? this.session,

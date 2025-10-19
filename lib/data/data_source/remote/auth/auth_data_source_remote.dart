@@ -5,6 +5,7 @@ import 'package:medi_supply_app_grupo3/data/data_source/dto/session/session_dto.
 import '../../../services/auth/auth_service.dart';
 import '../../api/mixin/api_response_handler_mixin.dart';
 import '../../dto/user/user_credentials_dto.dart';
+import '../../dto/user/user_dto.dart';
 import 'auth_data_source_remote_interface.dart';
 
 class AuthDataSourceRemote
@@ -22,7 +23,7 @@ class AuthDataSourceRemote
   }
 
   @override
-  Future<ApiResponse<SessionDto>> register(Map<String, dynamic> user) async {
+  Future<ApiResponse<SessionDto>> register(UserDto user) async {
     return handleApiCall<SessionDto>(_authService.register(user: user));
   }
 }

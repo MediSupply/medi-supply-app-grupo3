@@ -144,6 +144,45 @@ void main() {
         expect(loginViewModel.state.isLoading, isFalse);
       });
 
+      test('should handle error case in login', () async {
+        // Arrange
+        final loginViewModel = container.read(loginViewModelProvider.notifier);
+
+        // Set credentials
+        loginViewModel.setEmail('test@example.com');
+        loginViewModel.setPassword('password123');
+
+        // Act
+        final result = await loginViewModel.login();
+
+        // Assert - should return false due to network error
+        expect(result, isFalse);
+        expect(loginViewModel.state.isLoading, isFalse);
+        expect(loginViewModel.state.session, isNull);
+      });
+
+      test('should handle loading case in login', () async {
+        // Arrange
+        final loginViewModel = container.read(loginViewModelProvider.notifier);
+
+        // Set credentials
+        loginViewModel.setEmail('test@example.com');
+        loginViewModel.setPassword('password123');
+
+        // Act
+        final loginFuture = loginViewModel.login();
+
+        // Assert loading state is set immediately
+        expect(loginViewModel.state.isLoading, isTrue);
+
+        // Wait for completion
+        final result = await loginFuture;
+
+        // Assert final state
+        expect(result, isA<bool>());
+        expect(loginViewModel.state.isLoading, isFalse);
+      });
+
       test('should set loading state during login process', () async {
         // Arrange
         final loginViewModel = container.read(loginViewModelProvider.notifier);

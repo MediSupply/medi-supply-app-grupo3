@@ -77,6 +77,19 @@ class LoginView extends ConsumerWidget {
                 ),
               ),
             ),
+            const SizedBox(height: 32),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('¿No tienes una cuenta?'),
+                const SizedBox(width: 4),
+                TextButton(
+                  onPressed: () =>
+                      MediSupplyNavigation.goReplaceToRegister(context),
+                  child: Text('Registrate'),
+                ),
+              ],
+            ),
           ],
         ),
       ),

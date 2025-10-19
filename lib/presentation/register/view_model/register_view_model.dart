@@ -7,13 +7,13 @@ import '../../../data/repository/remote/auth/auth_repository_remote.dart';
 import '../../../data/repository/remote/auth/auth_repository_remote_interface.dart';
 import 'state/register_state.dart';
 
-final NotifierProvider<RegisterViewModel, RegisterState> registerViewModelProvider =
-    NotifierProvider<RegisterViewModel, RegisterState>(() => RegisterViewModel());
+final NotifierProvider<RegisterViewModel, RegisterState>
+registerViewModelProvider = NotifierProvider<RegisterViewModel, RegisterState>(
+  () => RegisterViewModel(),
+);
 
 class RegisterViewModel extends Notifier<RegisterState> {
   late AuthRepositoryRemoteInterface _authRepositoryRemote;
-
-  void Function(String p1)? get setContactPhone => null;
 
   @override
   RegisterState build() {
@@ -77,7 +77,7 @@ class RegisterViewModel extends Notifier<RegisterState> {
   }
 
   void setPhone(String phone) {
-   final User user = User(
+    final User user = User(
       name: state.user.name,
       documentType: state.user.documentType,
       documentNumber: state.user.documentNumber,
@@ -130,7 +130,6 @@ class RegisterViewModel extends Notifier<RegisterState> {
     return !session.hasError;
   }
 
-
   String? validateUserName() {
     return state.user.validateName();
   }
@@ -158,7 +157,4 @@ class RegisterViewModel extends Notifier<RegisterState> {
   String? validateUserPassword() {
     return state.user.validatePassword();
   }
-
-
-
 }

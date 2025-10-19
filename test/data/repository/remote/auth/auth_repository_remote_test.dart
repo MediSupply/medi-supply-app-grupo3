@@ -1,4 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:medi_supply_app_grupo3/data/data_source/dto/user/user_dto.dart';
+import 'package:medi_supply_app_grupo3/data/repository/mappers/user_mapper.dart';
 import 'package:medi_supply_app_grupo3/data/repository/remote/auth/auth_repository_remote.dart';
 import 'package:medi_supply_app_grupo3/data/data_source/remote/auth/auth_data_source_remote_interface.dart';
 import 'package:medi_supply_app_grupo3/data/data_source/dto/session/session_dto.dart';
@@ -46,9 +48,7 @@ class TestAuthDataSourceRemote implements AuthDataSourceRemoteInterface {
   }
 
   @override
-  Future<ApiResponse<SessionDto>> register(
-    Map<String, dynamic> userData,
-  ) async {
+  Future<ApiResponse<SessionDto>> register(UserDto userData) async {
     if (_shouldReturnError) {
       return ApiFailure<SessionDto>(
         message: _errorMessage,
@@ -187,14 +187,19 @@ void main() {
       test('should return Session when register succeeds', () async {
         // Arrange
         testAuthDataSourceRemote.setSuccessResponse();
-        const userData = {
-          'email': 'test@example.com',
-          'password': 'password123',
-          'name': 'Test User',
-        };
+        final userData = UserDto(
+          email: 'test@example.com',
+          password: 'password123',
+          name: 'Test User',
+          documentType: 'CC',
+          documentNumber: 1234567890,
+          address: 'Test Address',
+          phone: 'Test Phone',
+          role: RoleDto.USER,
+        );
 
         // Act
-        final result = await authRepositoryRemote.register(userData);
+        final result = await authRepositoryRemote.register(userData.toEntity());
 
         // Assert
         expect(result, isA<Session>());
@@ -206,14 +211,19 @@ void main() {
       test('should handle different user data', () async {
         // Arrange
         testAuthDataSourceRemote.setSuccessResponse();
-        const userData = {
-          'email': 'another@example.com',
-          'password': 'different123',
-          'name': 'Another User',
-        };
+        final userData = UserDto(
+          email: 'another@example.com',
+          password: 'different123',
+          name: 'Another User',
+          documentType: 'CC',
+          documentNumber: 1234567890,
+          address: 'Another Address',
+          phone: 'Another Phone',
+          role: RoleDto.USER,
+        );
 
         // Act
-        final result = await authRepositoryRemote.register(userData);
+        final result = await authRepositoryRemote.register(userData.toEntity());
 
         // Assert
         expect(result, isA<Session>());
@@ -226,15 +236,20 @@ void main() {
           message: 'Email already exists',
           statusCode: 409,
         );
-        const userData = {
-          'email': 'existing@example.com',
-          'password': 'password123',
-          'name': 'Existing User',
-        };
+        final userData = UserDto(
+          email: 'existing@example.com',
+          password: 'password123',
+          name: 'Existing User',
+          documentType: 'CC',
+          documentNumber: 1234567890,
+          address: 'Existing Address',
+          phone: 'Existing Phone',
+          role: RoleDto.USER,
+        );
 
         // Act & Assert
         expect(
-          () => authRepositoryRemote.register(userData),
+          () => authRepositoryRemote.register(userData.toEntity()),
           throwsA(isA<Exception>()),
         );
       });
@@ -248,15 +263,20 @@ void main() {
             message: errorMessage,
             statusCode: 400,
           );
-          const userData = {
-            'email': 'test@example.com',
-            'password': 'password123',
-            'name': 'Test User',
-          };
+          final userData = UserDto(
+            email: 'test@example.com',
+            password: 'password123',
+            name: 'Test User',
+            documentType: 'CC',
+            documentNumber: 1234567890,
+            address: 'Test Address',
+            phone: 'Test Phone',
+            role: RoleDto.USER,
+          );
 
           // Act & Assert
           try {
-            await authRepositoryRemote.register(userData);
+            await authRepositoryRemote.register(userData.toEntity());
             fail('Expected Exception to be thrown');
           } catch (e) {
             expect(e, isA<Exception>());
@@ -268,10 +288,19 @@ void main() {
       test('should handle empty user data', () async {
         // Arrange
         testAuthDataSourceRemote.setSuccessResponse();
-        const userData = <String, dynamic>{};
+        final userData = UserDto(
+          email: 'test@example.com',
+          password: 'password123',
+          name: 'Test User',
+          documentType: 'CC',
+          documentNumber: 1234567890,
+          address: 'Test Address',
+          phone: 'Test Phone',
+          role: RoleDto.USER,
+        );
 
         // Act
-        final result = await authRepositoryRemote.register(userData);
+        final result = await authRepositoryRemote.register(userData.toEntity());
 
         // Assert
         expect(result, isA<Session>());
@@ -281,16 +310,19 @@ void main() {
       test('should handle user data with additional fields', () async {
         // Arrange
         testAuthDataSourceRemote.setSuccessResponse();
-        const userData = {
-          'email': 'test@example.com',
-          'password': 'password123',
-          'name': 'Test User',
-          'phone': '+1234567890',
-          'age': 25,
-        };
+        final userData = UserDto(
+          email: 'test@example.com',
+          password: 'password123',
+          name: 'Test User',
+          documentType: 'CC',
+          documentNumber: 1234567890,
+          address: 'Test Address',
+          phone: 'Test Phone',
+          role: RoleDto.USER,
+        );
 
         // Act
-        final result = await authRepositoryRemote.register(userData);
+        final result = await authRepositoryRemote.register(userData.toEntity());
 
         // Assert
         expect(result, isA<Session>());

@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+enum Role { ADMIN, USER }
+
 class User extends Equatable {
   const User({
     this.name = '',
@@ -9,6 +11,7 @@ class User extends Equatable {
     this.phone = '',
     this.email = '',
     this.password = '',
+    this.role = Role.ADMIN,
   });
 
   // nombres y apellidos o razón social
@@ -32,6 +35,9 @@ class User extends Equatable {
   // CONTRASEÑA
   final String password;
 
+  // rol
+  final Role role;
+
   @override
   List<Object?> get props => [
     name,
@@ -54,8 +60,9 @@ class User extends Equatable {
   }
 
   String? validateDocumentNumber() {
-    if (documentNumber <= 0)
+    if (documentNumber <= 0) {
       return 'El número de documento es requerido y debe ser mayor a 0';
+    }
     return null;
   }
 
@@ -90,5 +97,4 @@ class User extends Equatable {
     }
     return null;
   }
-
 }

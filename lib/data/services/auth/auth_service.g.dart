@@ -50,17 +50,17 @@ class _AuthService implements AuthService {
   }
 
   @override
-  Future<SessionDto> register({required Map<String, dynamic> user}) async {
+  Future<SessionDto> register({required UserDto user}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    _data.addAll(user);
+    _data.addAll(user.toJson());
     final _options = _setStreamType<SessionDto>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/auth/register',
+            '/auth/signup',
             queryParameters: queryParameters,
             data: _data,
           )
