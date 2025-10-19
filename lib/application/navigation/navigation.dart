@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../presentation/clients/view/register_client_view.dart';
 import '../../presentation/home/view/home_view.dart';
 import '../../presentation/login/view/login_view.dart';
 import '../../presentation/register/view/register_view.dart';
@@ -11,6 +12,7 @@ class MediSupplyNavigation {
   static const String _loginScreen = '/login';
   static const String _registerScreen = '/register';
   static const String _homeScreen = '/home';
+  static const String _registerClientScreen = '/clients/register';
 
   static final GoRouter router = GoRouter(
     initialLocation: _splashScreen,
@@ -35,6 +37,11 @@ class MediSupplyNavigation {
         name: _homeScreen,
         builder: (context, state) => const HomeView(),
       ),
+      GoRoute(
+        path: _registerClientScreen,
+        name: _registerClientScreen,
+        builder: (context, state) => const RegisterClientView(),
+      ),
     ],
   );
 
@@ -48,5 +55,9 @@ class MediSupplyNavigation {
 
   static void goReplaceToHome(BuildContext context) {
     context.pushReplacementNamed(_homeScreen);
+  }
+
+  static void goToRegisterClient(BuildContext context) {
+    context.pushNamed(_registerClientScreen);
   }
 }
