@@ -20,7 +20,7 @@ class CreateOrderState {
     this.filteredClients = const [],
     this.filterClientName = '',
     this.filteredProducts = const [],
-    this.selectedClient ,
+    this.selectedClient,
     this.filterProductName = '',
     this.isLoading = false,
   });
