@@ -39,7 +39,7 @@ class CreateOrderView extends ConsumerStatefulWidget {
 
 class _CreateOrderViewState extends ConsumerState<CreateOrderView> {
   late PageController _pageController;
-
+  int _currentPage = 1;
   @override
   void initState() {
     super.initState();
@@ -75,6 +75,12 @@ class _CreateOrderViewState extends ConsumerState<CreateOrderView> {
                 Expanded(
                   child: PageView.builder(
                     controller: _pageController,
+
+                    onPageChanged: (index) {
+                      setState(() {
+                        _currentPage = index + 1;
+                      });
+                    },
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) => widget.pages[index],
                     itemCount: widget.pages.length,
@@ -95,7 +101,7 @@ class _CreateOrderViewState extends ConsumerState<CreateOrderView> {
                       ),
                     ),
                     const SizedBox(width: 16),
-                    Text('${_currentPage()} de ${widget.pages.length}'),
+                    Text('$_currentPage de ${widget.pages.length}'),
                     const SizedBox(width: 16),
                     ButtonIcon(
                       icon: Assets.icons.previousArrowIcon.svg(
@@ -123,11 +129,5 @@ class _CreateOrderViewState extends ConsumerState<CreateOrderView> {
         ),
       ),
     );
-  }
-
-  int _currentPage() {
-    return _pageController.hasClients
-        ? _pageController.page?.toInt() ?? 0 + 1
-        : 1;
   }
 }

@@ -218,14 +218,14 @@ void main() {
       expect(address, equals('Calle 1234 # 12-34'));
     });
 
-    test('getDeliveryAddress should return first client address', () {
+    test('getDeliveryAddress should return selected client address', () {
       final viewModel = container.read(createOrderViewModelProvider.notifier);
-      final clients = [
-        const Client(id: 'client-1', direccion: 'Client Address 1'),
-        const Client(id: 'client-2', direccion: 'Client Address 2'),
-      ];
+      const selectedClient = Client(
+        id: 'client-1',
+        direccion: 'Client Address 1',
+      );
 
-      viewModel.state = viewModel.state.copyWith(clients: clients);
+      viewModel.selectClient(selectedClient);
 
       final address = viewModel.getDeliveryAddress();
       expect(address, equals('Client Address 1'));
@@ -237,6 +237,162 @@ void main() {
       final timestamp = viewModel.getDeliveryTimestamp();
       expect(timestamp, isNotEmpty);
       expect(timestamp, startsWith('Dias '));
+    });
+
+    group('setFilterClientName', () {
+      test('should update filterClientName', () {
+        final viewModel =
+            container.read(createOrderViewModelProvider.notifier);
+        viewModel.setFilterClientName('John');
+        expect(viewModel.state.filterClientName, equals('John'));
+      });
+
+      test('should preserve other state when updating filterClientName', () {
+        final viewModel =
+            container.read(createOrderViewModelProvider.notifier);
+        final initialState = viewModel.state;
+        viewModel.setFilterClientName('Test Client');
+        expect(viewModel.state.filterProductName,
+            equals(initialState.filterProductName));
+        expect(viewModel.state.orderItems, equals(initialState.orderItems));
+      });
+
+      test('should handle empty filterClientName', () {
+        final viewModel =
+            container.read(createOrderViewModelProvider.notifier);
+        viewModel.setFilterClientName('');
+        expect(viewModel.state.filterClientName, equals(''));
+      });
+    });
+
+    group('filterClients', () {
+      test('should filter clients by name', () {
+        final viewModel =
+            container.read(createOrderViewModelProvider.notifier);
+        final clients = [
+          const Client(id: '1', nombre: 'John Doe'),
+          const Client(id: '2', nombre: 'Jane Smith'),
+          const Client(id: '3', nombre: 'Johnny Walker'),
+        ];
+
+        viewModel.state = viewModel.state.copyWith(
+          clients: clients,
+          filteredClients: clients,
+        );
+
+        viewModel.setFilterClientName('John');
+        viewModel.filterClients();
+
+        expect(viewModel.state.filteredClients.length, equals(2));
+        expect(viewModel.state.filteredClients[0].nombre, equals('John Doe'));
+        expect(viewModel.state.filteredClients[1].nombre,
+            equals('Johnny Walker'));
+      });
+
+      test('should be case insensitive when filtering clients', () {
+        final viewModel =
+            container.read(createOrderViewModelProvider.notifier);
+        final clients = [
+          const Client(id: '1', nombre: 'John Doe'),
+          const Client(id: '2', nombre: 'Jane Smith'),
+        ];
+
+        viewModel.state = viewModel.state.copyWith(
+          clients: clients,
+          filteredClients: clients,
+        );
+
+        viewModel.setFilterClientName('john');
+        viewModel.filterClients();
+
+        expect(viewModel.state.filteredClients.length, equals(1));
+        expect(viewModel.state.filteredClients.first.nombre,
+            equals('John Doe'));
+      });
+
+      test('should show all clients when filter is empty', () {
+        final viewModel =
+            container.read(createOrderViewModelProvider.notifier);
+        final clients = [
+          const Client(id: '1', nombre: 'John Doe'),
+          const Client(id: '2', nombre: 'Jane Smith'),
+        ];
+
+        viewModel.state = viewModel.state.copyWith(
+          clients: clients,
+          filteredClients: clients,
+        );
+
+        viewModel.setFilterClientName('');
+        viewModel.filterClients();
+
+        // When filter is empty, all clients match (empty string contains empty string)
+        expect(viewModel.state.filteredClients.length, equals(2));
+      });
+
+      test('should return empty list when no clients match filter', () {
+        final viewModel =
+            container.read(createOrderViewModelProvider.notifier);
+        final clients = [
+          const Client(id: '1', nombre: 'John Doe'),
+          const Client(id: '2', nombre: 'Jane Smith'),
+        ];
+
+        viewModel.state = viewModel.state.copyWith(
+          clients: clients,
+          filteredClients: clients,
+        );
+
+        viewModel.setFilterClientName('NonExistent');
+        viewModel.filterClients();
+
+        expect(viewModel.state.filteredClients, isEmpty);
+      });
+    });
+
+    group('selectClient', () {
+      test('should set selectedClient', () {
+        final viewModel =
+            container.read(createOrderViewModelProvider.notifier);
+        const client = Client(
+          id: 'client-1',
+          nombre: 'John Doe',
+          direccion: '123 Main St',
+        );
+
+        viewModel.selectClient(client);
+
+        expect(viewModel.state.selectedClient, equals(client));
+        expect(viewModel.state.selectedClient?.nombre, equals('John Doe'));
+        expect(viewModel.state.selectedClient?.direccion, equals('123 Main St'));
+      });
+
+      test('should replace previously selected client', () {
+        final viewModel =
+            container.read(createOrderViewModelProvider.notifier);
+        const client1 = Client(id: 'client-1', nombre: 'Client 1');
+        const client2 = Client(id: 'client-2', nombre: 'Client 2');
+
+        viewModel.selectClient(client1);
+        expect(viewModel.state.selectedClient?.id, equals('client-1'));
+
+        viewModel.selectClient(client2);
+        expect(viewModel.state.selectedClient?.id, equals('client-2'));
+        expect(viewModel.state.selectedClient?.nombre, equals('Client 2'));
+      });
+
+      test('should preserve other state when selecting client', () {
+        final viewModel =
+            container.read(createOrderViewModelProvider.notifier);
+        final initialState = viewModel.state;
+        const client = Client(id: 'client-1', nombre: 'John Doe');
+
+        viewModel.selectClient(client);
+
+        expect(viewModel.state.filterProductName,
+            equals(initialState.filterProductName));
+        expect(viewModel.state.orderItems, equals(initialState.orderItems));
+      });
     });
 
     group('getClients', () {
@@ -484,7 +640,7 @@ void main() {
         },
       );
 
-      test('should use client address when clients are available', () async {
+      test('should use selected client address when available', () async {
         // Arrange
         final viewModel = container.read(createOrderViewModelProvider.notifier);
         const product = Product(
@@ -493,11 +649,12 @@ void main() {
           valorUnitario: 25.0,
         );
 
-        final clients = [
-          const Client(id: 'client-1', direccion: 'Client Address 1'),
-        ];
+        const selectedClient = Client(
+          id: 'client-1',
+          direccion: 'Client Address 1',
+        );
 
-        viewModel.state = viewModel.state.copyWith(clients: clients);
+        viewModel.selectClient(selectedClient);
         viewModel.addOrderItem(product, 1);
 
         final mockOrder = {

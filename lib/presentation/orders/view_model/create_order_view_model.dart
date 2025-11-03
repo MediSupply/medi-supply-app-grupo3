@@ -4,6 +4,7 @@ import '../../../application/networking/networking.dart';
 import '../../../data/data_source/remote/client/client_data_source_remote.dart';
 import '../../../data/data_source/remote/order/order_data_source_remote.dart';
 import '../../../data/data_source/remote/product/product_data_source_remote.dart';
+import '../../../data/repository/entity/client/client.dart';
 import '../../../data/repository/entity/order/order.dart';
 import '../../../data/repository/entity/order/order_item.dart';
 import '../../../data/repository/entity/product/product.dart';
@@ -43,6 +44,22 @@ class CreateOrderViewModel extends Notifier<CreateOrderState> {
     state = state.copyWith(filterProductName: filterProductName);
   }
 
+  void setFilterClientName(String filterClientName) {
+    state = state.copyWith(filterClientName: filterClientName);
+  }
+
+  void filterClients() {
+    final List<Client> clients = state.clients
+        .where(
+          (element) => element.nombre.toUpperCase().contains(
+            state.filterClientName.toUpperCase(),
+          ),
+        )
+        .toList();
+
+    state = state.copyWith(filteredClients: clients);
+  }
+
   void filterProducts() {
     final List<Product> products = state.products
         .where(
@@ -53,6 +70,10 @@ class CreateOrderViewModel extends Notifier<CreateOrderState> {
         .toList();
 
     state = state.copyWith(filteredProducts: products);
+  }
+
+  void selectClient(Client client) {
+    state = state.copyWith(selectedClient: client);
   }
 
   void addOrderItem(Product product, int cantidad) {
@@ -103,8 +124,8 @@ class CreateOrderViewModel extends Notifier<CreateOrderState> {
   }
 
   String getDeliveryAddress() {
-    return state.clients.isNotEmpty
-        ? state.clients.first.direccion
+    return state.selectedClient != null
+        ? state.selectedClient!.direccion
         : 'Calle 1234 # 12-34';
   }
 
@@ -119,8 +140,11 @@ class CreateOrderViewModel extends Notifier<CreateOrderState> {
       () => _clientRepositoryRemote.getClients(),
     );
     clients.when(
-      data: (clients) =>
-          state = state.copyWith(clients: clients, isLoading: false),
+      data: (clients) => state = state.copyWith(
+        clients: clients,
+        filteredClients: clients,
+        isLoading: false,
+      ),
       error: (error, stackTrace) => state = state.copyWith(isLoading: false),
       loading: () => state = state.copyWith(isLoading: true),
     );
