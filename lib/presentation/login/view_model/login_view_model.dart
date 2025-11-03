@@ -43,9 +43,14 @@ class LoginViewModel extends Notifier<LoginState> {
       () => _authRepositoryRemote.login(state.userCredentials),
     );
     session.when(
-      data: (session) =>
-          state = state.copyWith(isLoading: false, session: session),
-      error: (error, stackTrace) => state = state.copyWith(isLoading: false),
+      data: (session) {
+        Networking.addAuthorizationHeader(session.token);
+        return state = state.copyWith(isLoading: false, session: session);
+      },
+      error: (error, stackTrace) {
+        Networking.removeAuthorizationHeader();
+        return state = state.copyWith(isLoading: false);
+      },
       loading: () => state = state.copyWith(isLoading: true),
     );
 

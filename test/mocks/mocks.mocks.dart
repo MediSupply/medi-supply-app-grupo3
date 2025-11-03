@@ -3,28 +3,52 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i7;
 
 import 'package:medi_supply_app_grupo3/data/data_source/api/api_response.dart'
-    as _i5;
+    as _i8;
+import 'package:medi_supply_app_grupo3/data/data_source/dto/client/client_dto.dart'
+    as _i17;
+import 'package:medi_supply_app_grupo3/data/data_source/dto/order/order_dto.dart'
+    as _i20;
+import 'package:medi_supply_app_grupo3/data/data_source/dto/product/product_dto.dart'
+    as _i23;
 import 'package:medi_supply_app_grupo3/data/data_source/dto/session/session_dto.dart'
-    as _i6;
-import 'package:medi_supply_app_grupo3/data/data_source/dto/user/user_credentials_dto.dart'
-    as _i7;
-import 'package:medi_supply_app_grupo3/data/data_source/dto/user/user_dto.dart'
     as _i9;
+import 'package:medi_supply_app_grupo3/data/data_source/dto/user/user_credentials_dto.dart'
+    as _i10;
+import 'package:medi_supply_app_grupo3/data/data_source/dto/user/user_dto.dart'
+    as _i12;
 import 'package:medi_supply_app_grupo3/data/data_source/remote/auth/auth_data_source_remote_interface.dart'
+    as _i6;
+import 'package:medi_supply_app_grupo3/data/data_source/remote/client/client_data_source_remote_interface.dart'
+    as _i16;
+import 'package:medi_supply_app_grupo3/data/data_source/remote/order/order_data_source_remote_interface.dart'
+    as _i19;
+import 'package:medi_supply_app_grupo3/data/data_source/remote/product/product_data_source_remote_interface.dart'
+    as _i22;
+import 'package:medi_supply_app_grupo3/data/repository/entity/client/client.dart'
     as _i3;
+import 'package:medi_supply_app_grupo3/data/repository/entity/order/order.dart'
+    as _i4;
+import 'package:medi_supply_app_grupo3/data/repository/entity/product/product.dart'
+    as _i5;
 import 'package:medi_supply_app_grupo3/data/repository/entity/session/session.dart'
     as _i2;
 import 'package:medi_supply_app_grupo3/data/repository/entity/user/user.dart'
-    as _i12;
+    as _i15;
 import 'package:medi_supply_app_grupo3/data/repository/entity/user/user_credentials.dart'
-    as _i11;
+    as _i14;
 import 'package:medi_supply_app_grupo3/data/repository/remote/auth/auth_repository_remote_interface.dart'
-    as _i10;
+    as _i13;
+import 'package:medi_supply_app_grupo3/data/repository/remote/client/client_repository_remote_interface.dart'
+    as _i18;
+import 'package:medi_supply_app_grupo3/data/repository/remote/order/order_repository_remote_interface.dart'
+    as _i21;
+import 'package:medi_supply_app_grupo3/data/repository/remote/product/product_repository_remote_interface.dart'
+    as _i24;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i8;
+import 'package:mockito/src/dummies.dart' as _i11;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -46,73 +70,291 @@ class _FakeSession_0 extends _i1.SmartFake implements _i2.Session {
     : super(parent, parentInvocation);
 }
 
+class _FakeClient_1 extends _i1.SmartFake implements _i3.Client {
+  _FakeClient_1(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeOrder_2 extends _i1.SmartFake implements _i4.Order {
+  _FakeOrder_2(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeProduct_3 extends _i1.SmartFake implements _i5.Product {
+  _FakeProduct_3(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
 /// A class which mocks [AuthDataSourceRemoteInterface].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockAuthDataSourceRemoteInterface extends _i1.Mock
-    implements _i3.AuthDataSourceRemoteInterface {
+    implements _i6.AuthDataSourceRemoteInterface {
   MockAuthDataSourceRemoteInterface() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<_i5.ApiResponse<_i6.SessionDto>> login(
-    _i7.UserCredentialsDto? userCredentials,
+  _i7.Future<_i8.ApiResponse<_i9.SessionDto>> login(
+    _i10.UserCredentialsDto? userCredentials,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#login, [userCredentials]),
-            returnValue: _i4.Future<_i5.ApiResponse<_i6.SessionDto>>.value(
-              _i8.dummyValue<_i5.ApiResponse<_i6.SessionDto>>(
+            returnValue: _i7.Future<_i8.ApiResponse<_i9.SessionDto>>.value(
+              _i11.dummyValue<_i8.ApiResponse<_i9.SessionDto>>(
                 this,
                 Invocation.method(#login, [userCredentials]),
               ),
             ),
           )
-          as _i4.Future<_i5.ApiResponse<_i6.SessionDto>>);
+          as _i7.Future<_i8.ApiResponse<_i9.SessionDto>>);
 
   @override
-  _i4.Future<_i5.ApiResponse<_i6.SessionDto>> register(_i9.UserDto? user) =>
+  _i7.Future<_i8.ApiResponse<_i9.SessionDto>> register(_i12.UserDto? user) =>
       (super.noSuchMethod(
             Invocation.method(#register, [user]),
-            returnValue: _i4.Future<_i5.ApiResponse<_i6.SessionDto>>.value(
-              _i8.dummyValue<_i5.ApiResponse<_i6.SessionDto>>(
+            returnValue: _i7.Future<_i8.ApiResponse<_i9.SessionDto>>.value(
+              _i11.dummyValue<_i8.ApiResponse<_i9.SessionDto>>(
                 this,
                 Invocation.method(#register, [user]),
               ),
             ),
           )
-          as _i4.Future<_i5.ApiResponse<_i6.SessionDto>>);
+          as _i7.Future<_i8.ApiResponse<_i9.SessionDto>>);
 }
 
 /// A class which mocks [AuthRepositoryRemoteInterface].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockAuthRepositoryRemoteInterface extends _i1.Mock
-    implements _i10.AuthRepositoryRemoteInterface {
+    implements _i13.AuthRepositoryRemoteInterface {
   MockAuthRepositoryRemoteInterface() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<_i2.Session> login(_i11.UserCredentials? userCredentials) =>
+  _i7.Future<_i2.Session> login(_i14.UserCredentials? userCredentials) =>
       (super.noSuchMethod(
             Invocation.method(#login, [userCredentials]),
-            returnValue: _i4.Future<_i2.Session>.value(
+            returnValue: _i7.Future<_i2.Session>.value(
               _FakeSession_0(
                 this,
                 Invocation.method(#login, [userCredentials]),
               ),
             ),
           )
-          as _i4.Future<_i2.Session>);
+          as _i7.Future<_i2.Session>);
 
   @override
-  _i4.Future<_i2.Session> register(_i12.User? user) =>
+  _i7.Future<_i2.Session> register(_i15.User? user) =>
       (super.noSuchMethod(
             Invocation.method(#register, [user]),
-            returnValue: _i4.Future<_i2.Session>.value(
+            returnValue: _i7.Future<_i2.Session>.value(
               _FakeSession_0(this, Invocation.method(#register, [user])),
             ),
           )
-          as _i4.Future<_i2.Session>);
+          as _i7.Future<_i2.Session>);
+}
+
+/// A class which mocks [ClientDataSourceRemoteInterface].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockClientDataSourceRemoteInterface extends _i1.Mock
+    implements _i16.ClientDataSourceRemoteInterface {
+  MockClientDataSourceRemoteInterface() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i7.Future<_i8.ApiResponse<_i17.ClientDto>> createClient(
+    _i17.ClientDto? client,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#createClient, [client]),
+            returnValue: _i7.Future<_i8.ApiResponse<_i17.ClientDto>>.value(
+              _i11.dummyValue<_i8.ApiResponse<_i17.ClientDto>>(
+                this,
+                Invocation.method(#createClient, [client]),
+              ),
+            ),
+          )
+          as _i7.Future<_i8.ApiResponse<_i17.ClientDto>>);
+
+  @override
+  _i7.Future<_i8.ApiResponse<List<_i17.ClientDto>>> getClients() =>
+      (super.noSuchMethod(
+            Invocation.method(#getClients, []),
+            returnValue:
+                _i7.Future<_i8.ApiResponse<List<_i17.ClientDto>>>.value(
+                  _i11.dummyValue<_i8.ApiResponse<List<_i17.ClientDto>>>(
+                    this,
+                    Invocation.method(#getClients, []),
+                  ),
+                ),
+          )
+          as _i7.Future<_i8.ApiResponse<List<_i17.ClientDto>>>);
+}
+
+/// A class which mocks [ClientRepositoryRemoteInterface].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockClientRepositoryRemoteInterface extends _i1.Mock
+    implements _i18.ClientRepositoryRemoteInterface {
+  MockClientRepositoryRemoteInterface() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i7.Future<_i3.Client> createClient(_i3.Client? client) =>
+      (super.noSuchMethod(
+            Invocation.method(#createClient, [client]),
+            returnValue: _i7.Future<_i3.Client>.value(
+              _FakeClient_1(this, Invocation.method(#createClient, [client])),
+            ),
+          )
+          as _i7.Future<_i3.Client>);
+
+  @override
+  _i7.Future<List<_i3.Client>> getClients() =>
+      (super.noSuchMethod(
+            Invocation.method(#getClients, []),
+            returnValue: _i7.Future<List<_i3.Client>>.value(<_i3.Client>[]),
+          )
+          as _i7.Future<List<_i3.Client>>);
+}
+
+/// A class which mocks [OrderDataSourceRemoteInterface].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockOrderDataSourceRemoteInterface extends _i1.Mock
+    implements _i19.OrderDataSourceRemoteInterface {
+  MockOrderDataSourceRemoteInterface() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i7.Future<_i8.ApiResponse<List<_i20.OrderDto>>> getOrders() =>
+      (super.noSuchMethod(
+            Invocation.method(#getOrders, []),
+            returnValue: _i7.Future<_i8.ApiResponse<List<_i20.OrderDto>>>.value(
+              _i11.dummyValue<_i8.ApiResponse<List<_i20.OrderDto>>>(
+                this,
+                Invocation.method(#getOrders, []),
+              ),
+            ),
+          )
+          as _i7.Future<_i8.ApiResponse<List<_i20.OrderDto>>>);
+
+  @override
+  _i7.Future<_i8.ApiResponse<_i20.OrderDto>> createOrder(
+    _i20.OrderDto? order,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#createOrder, [order]),
+            returnValue: _i7.Future<_i8.ApiResponse<_i20.OrderDto>>.value(
+              _i11.dummyValue<_i8.ApiResponse<_i20.OrderDto>>(
+                this,
+                Invocation.method(#createOrder, [order]),
+              ),
+            ),
+          )
+          as _i7.Future<_i8.ApiResponse<_i20.OrderDto>>);
+}
+
+/// A class which mocks [OrderRepositoryRemoteInterface].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockOrderRepositoryRemoteInterface extends _i1.Mock
+    implements _i21.OrderRepositoryRemoteInterface {
+  MockOrderRepositoryRemoteInterface() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i7.Future<List<_i4.Order>> getOrders() =>
+      (super.noSuchMethod(
+            Invocation.method(#getOrders, []),
+            returnValue: _i7.Future<List<_i4.Order>>.value(<_i4.Order>[]),
+          )
+          as _i7.Future<List<_i4.Order>>);
+
+  @override
+  _i7.Future<_i4.Order> createOrder(_i4.Order? order) =>
+      (super.noSuchMethod(
+            Invocation.method(#createOrder, [order]),
+            returnValue: _i7.Future<_i4.Order>.value(
+              _FakeOrder_2(this, Invocation.method(#createOrder, [order])),
+            ),
+          )
+          as _i7.Future<_i4.Order>);
+}
+
+/// A class which mocks [ProductDataSourceRemoteInterface].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockProductDataSourceRemoteInterface extends _i1.Mock
+    implements _i22.ProductDataSourceRemoteInterface {
+  MockProductDataSourceRemoteInterface() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i7.Future<_i8.ApiResponse<List<_i23.ProductDto>>> getProducts() =>
+      (super.noSuchMethod(
+            Invocation.method(#getProducts, []),
+            returnValue:
+                _i7.Future<_i8.ApiResponse<List<_i23.ProductDto>>>.value(
+                  _i11.dummyValue<_i8.ApiResponse<List<_i23.ProductDto>>>(
+                    this,
+                    Invocation.method(#getProducts, []),
+                  ),
+                ),
+          )
+          as _i7.Future<_i8.ApiResponse<List<_i23.ProductDto>>>);
+
+  @override
+  _i7.Future<_i8.ApiResponse<_i23.ProductDto>> createProduct(
+    _i23.ProductDto? product,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#createProduct, [product]),
+            returnValue: _i7.Future<_i8.ApiResponse<_i23.ProductDto>>.value(
+              _i11.dummyValue<_i8.ApiResponse<_i23.ProductDto>>(
+                this,
+                Invocation.method(#createProduct, [product]),
+              ),
+            ),
+          )
+          as _i7.Future<_i8.ApiResponse<_i23.ProductDto>>);
+}
+
+/// A class which mocks [ProductRepositoryRemoteInterface].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockProductRepositoryRemoteInterface extends _i1.Mock
+    implements _i24.ProductRepositoryRemoteInterface {
+  MockProductRepositoryRemoteInterface() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i7.Future<List<_i5.Product>> getProducts() =>
+      (super.noSuchMethod(
+            Invocation.method(#getProducts, []),
+            returnValue: _i7.Future<List<_i5.Product>>.value(<_i5.Product>[]),
+          )
+          as _i7.Future<List<_i5.Product>>);
+
+  @override
+  _i7.Future<_i5.Product> createProduct(_i5.Product? product) =>
+      (super.noSuchMethod(
+            Invocation.method(#createProduct, [product]),
+            returnValue: _i7.Future<_i5.Product>.value(
+              _FakeProduct_3(
+                this,
+                Invocation.method(#createProduct, [product]),
+              ),
+            ),
+          )
+          as _i7.Future<_i5.Product>);
 }

@@ -5,18 +5,31 @@ import 'package:go_router/go_router.dart';
 import '../../../gen/assets.gen.dart';
 import '../../design_system/components/button.dart';
 import '../../design_system/components/input.dart';
+import '../../design_system/components/snack_bar.dart';
 import '../../design_system/tokens/colors.dart';
+import '../view_model/register_client_view_model.dart';
+import '../view_model/state/register_client_state.dart';
 
 class RegisterClientView extends ConsumerWidget {
-  const RegisterClientView({super.key});
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  RegisterClientView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final RegisterClientState registerClientViewModel = ref.watch(
+      registerClientViewModelProvider,
+    );
+
     return Scaffold(
       backgroundColor: ColorsTokens.background,
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 32),
-        child: Button(label: 'Registrar cliente', onPressed: () {}),
+        child: Button(
+          label: 'Registrar cliente',
+          onPressed: () => _registerClient(context, ref),
+          isLoading: registerClientViewModel.isLoading,
+        ),
       ),
       body: SafeArea(
         child: Padding(
@@ -33,47 +46,86 @@ class RegisterClientView extends ConsumerWidget {
                   ),
                   const SizedBox(height: 32),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text('Registro de cliente'),
-                        const SizedBox(height: 16),
-                        Input(
-                          label: 'Nombre(s) y apellidos o razón social',
-                          hint: 'Ingresa tu nombre o razón social',
-                          onChanged: (value) {},
-                        ),
-                        const SizedBox(height: 16),
-                        Input(
-                          label: 'Tipo de documento',
-                          hint: 'Ingresa tu tipo de documento',
-                          onChanged: (value) {},
-                        ),
-                        const SizedBox(height: 16),
-                        Input(
-                          label: 'Número de documento',
-                          hint: 'Ingresa tu número de documento',
-                          onChanged: (value) {},
-                        ),
-                        const SizedBox(height: 16),
-                        Input(
-                          label: 'Dirección principal',
-                          hint: 'Ingresa tu dirección principal',
-                          onChanged: (value) {},
-                        ),
-                        const SizedBox(height: 16),
-                        Input(
-                          label: 'Teléfono de contacto',
-                          hint: 'Ingresa tu teléfono de contacto',
-                          onChanged: (value) {},
-                        ),
-                        const SizedBox(height: 16),
-                        Input(
-                          label: 'Correo electrónico',
-                          hint: 'Ingresa tu correo electrónico',
-                          onChanged: (value) {},
-                        ),
-                      ],
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text('Registro de cliente'),
+                          const SizedBox(height: 16),
+                          Input(
+                            label: 'Nombre(s) y apellidos o razón social',
+                            hint: 'Ingresa tu nombre o razón social',
+                            validator: (_) => ref
+                                .read(registerClientViewModelProvider.notifier)
+                                .validateClientNombre(),
+                            readOnly: registerClientViewModel.isLoading,
+                            onChanged: ref
+                                .read(registerClientViewModelProvider.notifier)
+                                .setNombre,
+                          ),
+                          const SizedBox(height: 16),
+                          Input(
+                            label: 'Tipo de documento',
+                            hint: 'Ingresa tu tipo de documento',
+                            validator: (_) => ref
+                                .read(registerClientViewModelProvider.notifier)
+                                .validateClientRazonSocial(),
+                            readOnly: registerClientViewModel.isLoading,
+                            onChanged: ref
+                                .read(registerClientViewModelProvider.notifier)
+                                .setRazonSocial,
+                          ),
+                          const SizedBox(height: 16),
+                          Input(
+                            label: 'Número de documento',
+                            hint: 'Ingresa tu número de documento',
+                            validator: (_) => ref
+                                .read(registerClientViewModelProvider.notifier)
+                                .validateClientNit(),
+                            readOnly: registerClientViewModel.isLoading,
+                            onChanged: ref
+                                .read(registerClientViewModelProvider.notifier)
+                                .setNit,
+                          ),
+                          const SizedBox(height: 16),
+                          Input(
+                            label: 'Dirección principal',
+                            hint: 'Ingresa tu dirección principal',
+                            validator: (_) => ref
+                                .read(registerClientViewModelProvider.notifier)
+                                .validateClientDireccion(),
+                            readOnly: registerClientViewModel.isLoading,
+                            onChanged: ref
+                                .read(registerClientViewModelProvider.notifier)
+                                .setDireccion,
+                          ),
+                          const SizedBox(height: 16),
+                          Input(
+                            label: 'Teléfono de contacto',
+                            hint: 'Ingresa tu teléfono de contacto',
+                            validator: (_) => ref
+                                .read(registerClientViewModelProvider.notifier)
+                                .validateClientTelefono(),
+                            readOnly: registerClientViewModel.isLoading,
+                            onChanged: ref
+                                .read(registerClientViewModelProvider.notifier)
+                                .setTelefono,
+                          ),
+                          const SizedBox(height: 16),
+                          Input(
+                            label: 'Correo electrónico',
+                            hint: 'Ingresa tu correo electrónico',
+                            validator: (_) => ref
+                                .read(registerClientViewModelProvider.notifier)
+                                .validateClientEmail(),
+                            readOnly: registerClientViewModel.isLoading,
+                            onChanged: ref
+                                .read(registerClientViewModelProvider.notifier)
+                                .setEmail,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -91,5 +143,23 @@ class RegisterClientView extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  void _registerClient(BuildContext context, WidgetRef ref) async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    if (!_formKey.currentState!.validate()) return;
+    final bool isRegistered = await ref
+        .read(registerClientViewModelProvider.notifier)
+        .registerClient();
+    if (!context.mounted) return;
+    if (isRegistered) {
+      SuccessSnackbar(
+        context: context,
+        label: 'Cliente registrado exitosamente',
+      );
+      context.pop();
+    } else {
+      ErrorSnackbar(context: context, label: 'Error al registrar cliente');
+    }
   }
 }

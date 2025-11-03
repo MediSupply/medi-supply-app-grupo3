@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import '../tokens/colors.dart';
 
 class ButtonIcon extends StatelessWidget {
-  final String label;
+  final String? label;
   final VoidCallback onPressed;
   final bool isLoading;
   final Widget icon;
   const ButtonIcon({
-    required this.label,
+    this.label,
     required this.onPressed,
     this.isLoading = false,
     required this.icon,
@@ -20,7 +20,9 @@ class ButtonIcon extends StatelessWidget {
     return ElevatedButton(
       onPressed: isLoading ? null : onPressed,
       style: ButtonStyle(
-        backgroundColor: WidgetStateProperty.all(ColorsTokens.blue),
+        backgroundColor: WidgetStateProperty.all(
+          label != null ? ColorsTokens.blue : ColorsTokens.background,
+        ),
         padding: WidgetStateProperty.all(
           const EdgeInsets.symmetric(vertical: 32, horizontal: 32),
         ),
@@ -32,11 +34,13 @@ class ButtonIcon extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           icon,
-          const SizedBox(width: 10),
-          Text(
-            label,
-            style: const TextStyle(fontSize: 18, color: Colors.white),
-          ),
+          if (label != null) ...[
+            const SizedBox(width: 10),
+            Text(
+              label!,
+              style: const TextStyle(fontSize: 18, color: Colors.white),
+            ),
+          ],
           if (isLoading) const SizedBox(width: 10),
           if (isLoading)
             const CircularProgressIndicator.adaptive(

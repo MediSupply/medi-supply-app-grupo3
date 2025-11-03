@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../gen/assets.gen.dart';
 import '../../clients/view/clients_view.dart';
 import '../../design_system/tokens/colors.dart';
+import '../../orders/view/orders_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -77,7 +78,7 @@ class _HomeViewState extends State<HomeView> {
                 controller: _pageController,
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
-                  Container(color: ColorsTokens.blue),
+                  const OrdersView(),
                   const ClientsView(),
                   Container(color: ColorsTokens.primary),
                 ],
