@@ -241,25 +241,24 @@ void main() {
 
     group('setFilterClientName', () {
       test('should update filterClientName', () {
-        final viewModel =
-            container.read(createOrderViewModelProvider.notifier);
+        final viewModel = container.read(createOrderViewModelProvider.notifier);
         viewModel.setFilterClientName('John');
         expect(viewModel.state.filterClientName, equals('John'));
       });
 
       test('should preserve other state when updating filterClientName', () {
-        final viewModel =
-            container.read(createOrderViewModelProvider.notifier);
+        final viewModel = container.read(createOrderViewModelProvider.notifier);
         final initialState = viewModel.state;
         viewModel.setFilterClientName('Test Client');
-        expect(viewModel.state.filterProductName,
-            equals(initialState.filterProductName));
+        expect(
+          viewModel.state.filterProductName,
+          equals(initialState.filterProductName),
+        );
         expect(viewModel.state.orderItems, equals(initialState.orderItems));
       });
 
       test('should handle empty filterClientName', () {
-        final viewModel =
-            container.read(createOrderViewModelProvider.notifier);
+        final viewModel = container.read(createOrderViewModelProvider.notifier);
         viewModel.setFilterClientName('');
         expect(viewModel.state.filterClientName, equals(''));
       });
@@ -267,8 +266,7 @@ void main() {
 
     group('filterClients', () {
       test('should filter clients by name', () {
-        final viewModel =
-            container.read(createOrderViewModelProvider.notifier);
+        final viewModel = container.read(createOrderViewModelProvider.notifier);
         final clients = [
           const Client(id: '1', nombre: 'John Doe'),
           const Client(id: '2', nombre: 'Jane Smith'),
@@ -285,13 +283,14 @@ void main() {
 
         expect(viewModel.state.filteredClients.length, equals(2));
         expect(viewModel.state.filteredClients[0].nombre, equals('John Doe'));
-        expect(viewModel.state.filteredClients[1].nombre,
-            equals('Johnny Walker'));
+        expect(
+          viewModel.state.filteredClients[1].nombre,
+          equals('Johnny Walker'),
+        );
       });
 
       test('should be case insensitive when filtering clients', () {
-        final viewModel =
-            container.read(createOrderViewModelProvider.notifier);
+        final viewModel = container.read(createOrderViewModelProvider.notifier);
         final clients = [
           const Client(id: '1', nombre: 'John Doe'),
           const Client(id: '2', nombre: 'Jane Smith'),
@@ -306,13 +305,14 @@ void main() {
         viewModel.filterClients();
 
         expect(viewModel.state.filteredClients.length, equals(1));
-        expect(viewModel.state.filteredClients.first.nombre,
-            equals('John Doe'));
+        expect(
+          viewModel.state.filteredClients.first.nombre,
+          equals('John Doe'),
+        );
       });
 
       test('should show all clients when filter is empty', () {
-        final viewModel =
-            container.read(createOrderViewModelProvider.notifier);
+        final viewModel = container.read(createOrderViewModelProvider.notifier);
         final clients = [
           const Client(id: '1', nombre: 'John Doe'),
           const Client(id: '2', nombre: 'Jane Smith'),
@@ -331,8 +331,7 @@ void main() {
       });
 
       test('should return empty list when no clients match filter', () {
-        final viewModel =
-            container.read(createOrderViewModelProvider.notifier);
+        final viewModel = container.read(createOrderViewModelProvider.notifier);
         final clients = [
           const Client(id: '1', nombre: 'John Doe'),
           const Client(id: '2', nombre: 'Jane Smith'),
@@ -352,8 +351,7 @@ void main() {
 
     group('selectClient', () {
       test('should set selectedClient', () {
-        final viewModel =
-            container.read(createOrderViewModelProvider.notifier);
+        final viewModel = container.read(createOrderViewModelProvider.notifier);
         const client = Client(
           id: 'client-1',
           nombre: 'John Doe',
@@ -364,12 +362,14 @@ void main() {
 
         expect(viewModel.state.selectedClient, equals(client));
         expect(viewModel.state.selectedClient?.nombre, equals('John Doe'));
-        expect(viewModel.state.selectedClient?.direccion, equals('123 Main St'));
+        expect(
+          viewModel.state.selectedClient?.direccion,
+          equals('123 Main St'),
+        );
       });
 
       test('should replace previously selected client', () {
-        final viewModel =
-            container.read(createOrderViewModelProvider.notifier);
+        final viewModel = container.read(createOrderViewModelProvider.notifier);
         const client1 = Client(id: 'client-1', nombre: 'Client 1');
         const client2 = Client(id: 'client-2', nombre: 'Client 2');
 
@@ -382,15 +382,16 @@ void main() {
       });
 
       test('should preserve other state when selecting client', () {
-        final viewModel =
-            container.read(createOrderViewModelProvider.notifier);
+        final viewModel = container.read(createOrderViewModelProvider.notifier);
         final initialState = viewModel.state;
         const client = Client(id: 'client-1', nombre: 'John Doe');
 
         viewModel.selectClient(client);
 
-        expect(viewModel.state.filterProductName,
-            equals(initialState.filterProductName));
+        expect(
+          viewModel.state.filterProductName,
+          equals(initialState.filterProductName),
+        );
         expect(viewModel.state.orderItems, equals(initialState.orderItems));
       });
     });
