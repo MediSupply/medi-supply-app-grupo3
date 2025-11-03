@@ -138,5 +138,195 @@ void main() {
         }
       },
     );
+
+    group('addAuthorizationHeader', () {
+      test('should add authorization header to Dio options', () {
+        // Arrange
+        final networking = Networking();
+        const token = 'test-token-123';
+
+        // Act
+        Networking.addAuthorizationHeader(token);
+
+        // Assert
+        expect(
+          networking.dio.options.headers['Authorization'],
+          equals('Bearer $token'),
+        );
+        expect(
+          networking.dio.options.headers['User-Agent'],
+          equals('MediSupplyApp/1.0.0'),
+        );
+        expect(
+          networking.dio.options.headers['Accept'],
+          equals('application/json'),
+        );
+        expect(
+          networking.dio.options.headers['Content-Type'],
+          equals('application/json'),
+        );
+      });
+
+      test('should add authorization header with different tokens', () {
+        // Arrange
+        final networking = Networking();
+        const token1 = 'token-1';
+        const token2 = 'token-2';
+
+        // Act
+        Networking.addAuthorizationHeader(token1);
+        final headers1 = networking.dio.options.headers['Authorization'];
+        Networking.addAuthorizationHeader(token2);
+
+        // Assert
+        expect(headers1, equals('Bearer $token1'));
+        expect(
+          networking.dio.options.headers['Authorization'],
+          equals('Bearer $token2'),
+        );
+      });
+
+      test('should add all required headers together', () {
+        // Arrange
+        final networking = Networking();
+        const token = 'my-auth-token';
+
+        // Act
+        Networking.addAuthorizationHeader(token);
+
+        // Assert
+        final headers = networking.dio.options.headers;
+        expect(headers.containsKey('Authorization'), isTrue);
+        expect(headers.containsKey('User-Agent'), isTrue);
+        expect(headers.containsKey('Accept'), isTrue);
+        expect(headers.containsKey('Content-Type'), isTrue);
+        expect(headers['Authorization'], equals('Bearer $token'));
+      });
+
+      test('should override existing authorization header', () {
+        // Arrange
+        final networking = Networking();
+        const token1 = 'first-token';
+        const token2 = 'second-token';
+
+        // Act
+        Networking.addAuthorizationHeader(token1);
+        Networking.addAuthorizationHeader(token2);
+
+        // Assert
+        expect(
+          networking.dio.options.headers['Authorization'],
+          equals('Bearer $token2'),
+        );
+        expect(
+          networking.dio.options.headers['Authorization'],
+          isNot(equals('Bearer $token1')),
+        );
+      });
+    });
+
+    group('removeAuthorizationHeader', () {
+      test('should clear all headers from Dio options', () {
+        // Arrange
+        final networking = Networking();
+        const token = 'test-token';
+
+        // Add headers first
+        Networking.addAuthorizationHeader(token);
+
+        // Act
+        Networking.removeAuthorizationHeader();
+
+        // Assert
+        expect(networking.dio.options.headers.isEmpty, isTrue);
+      });
+
+      test('should clear headers even if none were set', () {
+        // Arrange
+        final networking = Networking();
+
+        // Act
+        Networking.removeAuthorizationHeader();
+
+        // Assert
+        expect(networking.dio.options.headers.isEmpty, isTrue);
+      });
+
+      test('should allow adding headers after removal', () {
+        // Arrange
+        final networking = Networking();
+        const token1 = 'token-1';
+        const token2 = 'token-2';
+
+        // Act
+        Networking.addAuthorizationHeader(token1);
+        Networking.removeAuthorizationHeader();
+        Networking.addAuthorizationHeader(token2);
+
+        // Assert
+        expect(
+          networking.dio.options.headers['Authorization'],
+          equals('Bearer $token2'),
+        );
+        expect(
+          networking.dio.options.headers.containsKey('Authorization'),
+          isTrue,
+        );
+      });
+
+      test('should clear headers including authorization', () {
+        // Arrange
+        final networking = Networking();
+        const token = 'test-token';
+
+        // Act
+        Networking.addAuthorizationHeader(token);
+        expect(
+          networking.dio.options.headers.containsKey('Authorization'),
+          isTrue,
+        );
+        Networking.removeAuthorizationHeader();
+
+        // Assert
+        expect(
+          networking.dio.options.headers.containsKey('Authorization'),
+          isFalse,
+        );
+        expect(
+          networking.dio.options.headers.containsKey('User-Agent'),
+          isFalse,
+        );
+        expect(networking.dio.options.headers.containsKey('Accept'), isFalse);
+        expect(
+          networking.dio.options.headers.containsKey('Content-Type'),
+          isFalse,
+        );
+      });
+    });
+
+    group('Authorization header workflow', () {
+      test('should handle complete workflow: add -> remove -> add', () {
+        // Arrange
+        final networking = Networking();
+        const token1 = 'initial-token';
+        const token2 = 'final-token';
+
+        // Act & Assert
+        Networking.addAuthorizationHeader(token1);
+        expect(
+          networking.dio.options.headers['Authorization'],
+          equals('Bearer $token1'),
+        );
+
+        Networking.removeAuthorizationHeader();
+        expect(networking.dio.options.headers.isEmpty, isTrue);
+
+        Networking.addAuthorizationHeader(token2);
+        expect(
+          networking.dio.options.headers['Authorization'],
+          equals('Bearer $token2'),
+        );
+      });
+    });
   });
 }

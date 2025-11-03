@@ -15,4 +15,17 @@ class Networking {
   }
 
   static Networking get instance => _instance;
+
+  static void addAuthorizationHeader(String token) {
+    _instance.dio.options.headers.addAll({
+      'User-Agent': 'MediSupplyApp/1.0.0',
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+  }
+
+  static void removeAuthorizationHeader() {
+    _instance.dio.options.headers.clear();
+  }
 }

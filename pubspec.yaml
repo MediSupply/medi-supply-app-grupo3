@@ -34,6 +34,7 @@ dev_dependencies:
   json_serializable: ^6.8.0
   retrofit_generator: ^10.0.6
   mockito: ^5.4.4
+  http_mock_adapter: ^0.6.1
 
 flutter_gen:
   output: lib/gen/

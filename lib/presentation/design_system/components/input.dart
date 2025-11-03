@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Input extends StatefulWidget {
   final void Function(String)? onChanged;
@@ -7,7 +8,9 @@ class Input extends StatefulWidget {
   final String hint;
   final String? Function(String?)? validator;
   final bool readOnly;
-
+  final List<TextInputFormatter>? inputFormatters;
+  final int? maxLength;
+  final String? initialValue;
   const Input({
     required this.onChanged,
     this.obscureText = false,
@@ -15,6 +18,9 @@ class Input extends StatefulWidget {
     required this.hint,
     this.validator,
     this.readOnly = false,
+    this.inputFormatters,
+    this.maxLength,
+    this.initialValue,
     super.key,
   });
 
@@ -29,6 +35,9 @@ class _InputState extends State<Input> {
   void initState() {
     super.initState();
     _controller = TextEditingController();
+    if (widget.initialValue != null) {
+      _controller.text = widget.initialValue!;
+    }
   }
 
   @override
@@ -45,6 +54,8 @@ class _InputState extends State<Input> {
       onChanged: widget.onChanged,
       validator: widget.validator,
       readOnly: widget.readOnly,
+      inputFormatters: widget.inputFormatters,
+      maxLength: widget.maxLength,
       decoration: InputDecoration(
         label: Text(
           widget.label,

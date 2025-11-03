@@ -28,6 +28,14 @@ class $AssetsIconsGen {
   /// File path: assets/icons/key_icon.svg
   SvgGenImage get keyIcon => const SvgGenImage('assets/icons/key_icon.svg');
 
+  /// File path: assets/icons/next_arrow_icon.svg
+  SvgGenImage get nextArrowIcon =>
+      const SvgGenImage('assets/icons/next_arrow_icon.svg');
+
+  /// File path: assets/icons/previous_arrow_icon.svg
+  SvgGenImage get previousArrowIcon =>
+      const SvgGenImage('assets/icons/previous_arrow_icon.svg');
+
   /// File path: assets/icons/search_icon.svg
   SvgGenImage get searchIcon =>
       const SvgGenImage('assets/icons/search_icon.svg');
@@ -43,6 +51,8 @@ class $AssetsIconsGen {
     addUserIcon,
     avatarIcon,
     keyIcon,
+    nextArrowIcon,
+    previousArrowIcon,
     searchIcon,
     sheetIcon,
     usersIcon,
