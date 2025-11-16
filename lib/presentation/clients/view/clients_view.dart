@@ -51,7 +51,7 @@ class ClientsView extends StatelessWidget {
         return (
           'Consultar visita',
           Assets.icons.searchIcon.svg(width: 24, height: 24),
-          () {},
+          () => MediSupplyNavigation.goToVisitClientDetail(context),
         );
       default:
         return ('', const SizedBox.shrink(), () {});
