@@ -9,6 +9,9 @@ class MediSupply extends StatelessWidget {
     return MaterialApp.router(
       title: 'MediSupply App',
       routerConfig: MediSupplyNavigation.router,
+      theme: ThemeData(
+        fontFamily: 'Poppins',
+      ),
     );
   }
 }
