@@ -9,6 +9,7 @@ import '../../presentation/orders/view/create_order_view.dart';
 import '../../presentation/register/view/register_view.dart';
 import '../../presentation/splash_screen/view/splash_screen_view.dart';
 import '../../presentation/clients/view/client_detail_view.dart';
+import '../../presentation/clients/view/visit_client_register_view.dart';
 
 class MediSupplyNavigation {
   static const String _splashScreen = '/';
@@ -18,6 +19,7 @@ class MediSupplyNavigation {
   static const String _registerClientScreen = '/clients/register';
   static const String _clientDetailScreen = '/clients/detail';
   static const String _createOrderScreen = '/orders/create';
+  static const String _visitClientRegisterScreen = '/clients/visit_register';
 
   static final GoRouter router = GoRouter(
     initialLocation: _splashScreen,
@@ -58,11 +60,16 @@ class MediSupplyNavigation {
           return CreateOrderView(role: role);
         },
       ),
-      
+
       GoRoute(
         path: _clientDetailScreen,
         name: _clientDetailScreen,
         builder: (context, state) => ClientDetailView(),
+      ),
+      GoRoute(
+        path: _visitClientRegisterScreen,
+        name: _visitClientRegisterScreen,
+        builder: (context, state) => VisitClientRegisterView(),
       ),
     ],
   );
@@ -87,7 +94,11 @@ class MediSupplyNavigation {
     context.pushNamed(_createOrderScreen, extra: role);
   }
 
-    static void goToClientDetail(BuildContext context) {
+  static void goToClientDetail(BuildContext context) {
     context.pushNamed(_clientDetailScreen);
+  }
+
+  static void goToVisitClientRegister(BuildContext context) {
+    context.pushNamed(_visitClientRegisterScreen);
   }
 }

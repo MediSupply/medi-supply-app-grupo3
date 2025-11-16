@@ -45,7 +45,7 @@ class ClientsView extends StatelessWidget {
         return (
           'Registar visita',
           Assets.icons.usersIcon.svg(width: 24, height: 24),
-          () {},
+          () => MediSupplyNavigation.goToVisitClientRegister(context),
         );
       case 3:
         return (
