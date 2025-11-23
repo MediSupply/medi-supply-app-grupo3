@@ -61,7 +61,7 @@ void main() {
           documentNumber: 1234567890,
           address: 'Test Address',
           phone: 'Test Phone',
-          role: RoleDto.USER,
+          role: RoleDto.user,
         );
 
         // Act

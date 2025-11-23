@@ -15,7 +15,7 @@ void main() {
       expect(user.phone, equals(''));
       expect(user.email, equals(''));
       expect(user.password, equals(''));
-      expect(user.role, equals(Role.ADMIN));
+      expect(user.role, equals(Role.admin));
     });
 
     test('should create User with custom values', () {
@@ -28,7 +28,7 @@ void main() {
         phone: '+1234567890',
         email: 'john@example.com',
         password: 'password123',
-        role: Role.USER,
+        role: Role.user,
       );
 
       // Assert
@@ -39,7 +39,7 @@ void main() {
       expect(user.phone, equals('+1234567890'));
       expect(user.email, equals('john@example.com'));
       expect(user.password, equals('password123'));
-      expect(user.role, equals(Role.USER));
+      expect(user.role, equals(Role.user));
     });
 
     test('should be equal when properties are the same', () {
@@ -52,7 +52,7 @@ void main() {
         phone: '+1234567890',
         email: 'john@example.com',
         password: 'password123',
-        role: Role.USER,
+        role: Role.user,
       );
       const user2 = User(
         name: 'John Doe',
@@ -62,7 +62,7 @@ void main() {
         phone: '+1234567890',
         email: 'john@example.com',
         password: 'password123',
-        role: Role.USER,
+        role: Role.user,
       );
 
       // Assert
@@ -79,7 +79,7 @@ void main() {
         phone: '+1234567890',
         email: 'john@example.com',
         password: 'password123',
-        role: Role.USER,
+        role: Role.user,
       );
       const user2 = User(
         name: 'Jane Doe',
@@ -89,7 +89,7 @@ void main() {
         phone: '+1234567890',
         email: 'john@example.com',
         password: 'password123',
-        role: Role.USER,
+        role: Role.user,
       );
 
       // Assert
@@ -489,25 +489,25 @@ void main() {
     group('Role enum', () {
       test('should have ADMIN and USER values', () {
         // Assert
-        expect(Role.values, contains(Role.ADMIN));
-        expect(Role.values, contains(Role.USER));
+        expect(Role.values, contains(Role.admin));
+        expect(Role.values, contains(Role.user));
         expect(Role.values.length, equals(2));
       });
 
       test('should create user with ADMIN role', () {
         // Arrange & Act
-        const user = User(role: Role.ADMIN);
+        const user = User(role: Role.admin);
 
         // Assert
-        expect(user.role, equals(Role.ADMIN));
+        expect(user.role, equals(Role.admin));
       });
 
       test('should create user with USER role', () {
         // Arrange & Act
-        const user = User(role: Role.USER);
+        const user = User(role: Role.user);
 
         // Assert
-        expect(user.role, equals(Role.USER));
+        expect(user.role, equals(Role.user));
       });
     });
   });

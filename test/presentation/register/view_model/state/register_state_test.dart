@@ -193,7 +193,7 @@ void main() {
       expect(state.user.documentNumber, equals(0));
       expect(state.user.address, equals(''));
       expect(state.user.phone, equals(''));
-      expect(state.user.role, equals(Role.ADMIN));
+      expect(state.user.role, equals(Role.admin));
     });
 
     test('should handle user with all fields', () {
@@ -206,7 +206,7 @@ void main() {
         phone: '+1234567890',
         email: 'john@example.com',
         password: 'password123',
-        role: Role.USER,
+        role: Role.user,
       );
 
       // Act
@@ -220,7 +220,7 @@ void main() {
       expect(state.user.phone, equals('+1234567890'));
       expect(state.user.email, equals('john@example.com'));
       expect(state.user.password, equals('password123'));
-      expect(state.user.role, equals(Role.USER));
+      expect(state.user.role, equals(Role.user)); 
     });
 
     test('should handle session with user', () {

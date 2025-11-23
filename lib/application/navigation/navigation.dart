@@ -51,7 +51,7 @@ class MediSupplyNavigation {
         builder: (context, state) {
           final role = Role.values.firstWhere(
             (element) => element == state.extra as Role,
-            orElse: () => Role.USER,
+            orElse: () => Role.user,
           );
           return CreateOrderView(role: role);
         },

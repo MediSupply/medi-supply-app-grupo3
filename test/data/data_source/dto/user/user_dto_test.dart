@@ -13,7 +13,7 @@ void main() {
         phone: '+1234567890',
         email: 'john@example.com',
         password: 'password123',
-        role: RoleDto.USER,
+        role: RoleDto.user,
       );
 
       // Assert
@@ -24,7 +24,7 @@ void main() {
       expect(dto.phone, equals('+1234567890'));
       expect(dto.email, equals('john@example.com'));
       expect(dto.password, equals('password123'));
-      expect(dto.role, equals(RoleDto.USER));
+      expect(dto.role, equals(RoleDto.user));
     });
 
     test('should create UserDto with ADMIN role', () {
@@ -37,7 +37,7 @@ void main() {
         phone: '+0987654321',
         email: 'admin@example.com',
         password: 'admin123',
-        role: RoleDto.ADMIN,
+        role: RoleDto.admin,
       );
 
       // Assert
@@ -48,7 +48,7 @@ void main() {
       expect(dto.phone, equals('+0987654321'));
       expect(dto.email, equals('admin@example.com'));
       expect(dto.password, equals('admin123'));
-      expect(dto.role, equals(RoleDto.ADMIN));
+      expect(dto.role, equals(RoleDto.admin));
     });
 
     test('should create from JSON', () {
@@ -61,7 +61,7 @@ void main() {
         'phone': '+1234567890',
         'email': 'john@example.com',
         'password': 'password123',
-        'role': 'USER',
+        'role': 'user',
       };
 
       // Act
@@ -75,7 +75,7 @@ void main() {
       expect(dto.phone, equals('+1234567890'));
       expect(dto.email, equals('john@example.com'));
       expect(dto.password, equals('password123'));
-      expect(dto.role, equals(RoleDto.USER));
+      expect(dto.role, equals(RoleDto.user));
     });
 
     test('should create from JSON with ADMIN role', () {
@@ -88,7 +88,7 @@ void main() {
         'phone': '+0987654321',
         'email': 'admin@example.com',
         'password': 'admin123',
-        'role': 'ADMIN',
+        'role': 'admin',
       };
 
       // Act
@@ -102,7 +102,7 @@ void main() {
       expect(dto.phone, equals('+0987654321'));
       expect(dto.email, equals('admin@example.com'));
       expect(dto.password, equals('admin123'));
-      expect(dto.role, equals(RoleDto.ADMIN));
+      expect(dto.role, equals(RoleDto.admin));
     });
 
     test('should convert to JSON', () {
@@ -115,7 +115,7 @@ void main() {
         phone: '+1234567890',
         email: 'john@example.com',
         password: 'password123',
-        role: RoleDto.USER,
+        role: RoleDto.user,
       );
 
       // Act
@@ -129,7 +129,7 @@ void main() {
       expect(json['phone'], equals('+1234567890'));
       expect(json['email'], equals('john@example.com'));
       expect(json['password'], equals('password123'));
-      expect(json['role'], equals('USER'));
+      expect(json['role'], equals('user'));
     });
 
     test('should convert to JSON with ADMIN role', () {
@@ -142,7 +142,7 @@ void main() {
         phone: '+0987654321',
         email: 'admin@example.com',
         password: 'admin123',
-        role: RoleDto.ADMIN,
+        role: RoleDto.admin,
       );
 
       // Act
@@ -156,7 +156,7 @@ void main() {
       expect(json['phone'], equals('+0987654321'));
       expect(json['email'], equals('admin@example.com'));
       expect(json['password'], equals('admin123'));
-      expect(json['role'], equals('ADMIN'));
+      expect(json['role'], equals('admin'));
     });
 
     test('should handle empty strings', () {
@@ -169,7 +169,7 @@ void main() {
         phone: '',
         email: '',
         password: '',
-        role: RoleDto.USER,
+        role: RoleDto.user,
       );
 
       // Assert
@@ -180,7 +180,7 @@ void main() {
       expect(dto.phone, equals(''));
       expect(dto.email, equals(''));
       expect(dto.password, equals(''));
-      expect(dto.role, equals(RoleDto.USER));
+      expect(dto.role, equals(RoleDto.user));
     });
 
     test('should handle special characters', () {
@@ -193,7 +193,7 @@ void main() {
         phone: '+57 300 123 4567',
         email: 'josé.maría@ejemplo.com',
         password: 'P@ssw0rd!@#\$%^&*()',
-        role: RoleDto.USER,
+        role: RoleDto.user,
       );
 
       // Assert
@@ -204,8 +204,8 @@ void main() {
       expect(dto.phone, equals('+57 300 123 4567'));
       expect(dto.email, equals('josé.maría@ejemplo.com'));
       expect(dto.password, equals('P@ssw0rd!@#\$%^&*()'));
-      expect(dto.role, equals(RoleDto.USER));
-    });
+      expect(dto.role, equals(RoleDto.user));
+    });   
 
     test('should handle large numbers', () {
       // Arrange & Act
@@ -217,7 +217,7 @@ void main() {
         phone: '+1234567890',
         email: 'test@example.com',
         password: 'password123',
-        role: RoleDto.USER,
+        role: RoleDto.user,
       );
 
       // Assert
@@ -234,7 +234,7 @@ void main() {
         'phone': '',
         'email': '',
         'password': '',
-        'role': 'USER',
+        'role': 'user',
       };
 
       // Act
@@ -248,18 +248,18 @@ void main() {
       expect(dto.phone, equals(''));
       expect(dto.email, equals(''));
       expect(dto.password, equals(''));
-      expect(dto.role, equals(RoleDto.USER));
+      expect(dto.role, equals(RoleDto.user));
     });
 
     group('RoleDto enum', () {
-      test('should have ADMIN and USER values', () {
+      test('should have admin and user values', () {
         // Assert
-        expect(RoleDto.values, contains(RoleDto.ADMIN));
-        expect(RoleDto.values, contains(RoleDto.USER));
+        expect(RoleDto.values, contains(RoleDto.admin));
+        expect(RoleDto.values, contains(RoleDto.user));
         expect(RoleDto.values.length, equals(2));
       });
 
-      test('should serialize ADMIN role correctly', () {
+      test('should serialize admin role correctly', () {
         // Arrange
         final dto = UserDto(
           name: 'Admin',
@@ -269,14 +269,14 @@ void main() {
           phone: '+1234567890',
           email: 'admin@example.com',
           password: 'password',
-          role: RoleDto.ADMIN,
+          role: RoleDto.admin,
         );
 
         // Act
         final json = dto.toJson();
 
         // Assert
-        expect(json['role'], equals('ADMIN'));
+        expect(json['role'], equals('admin'));
       });
 
       test('should serialize USER role correctly', () {
@@ -289,17 +289,17 @@ void main() {
           phone: '+1234567890',
           email: 'user@example.com',
           password: 'password',
-          role: RoleDto.USER,
+            role: RoleDto.user,
         );
 
         // Act
         final json = dto.toJson();
 
         // Assert
-        expect(json['role'], equals('USER'));
+        expect(json['role'], equals('user'));
       });
 
-      test('should deserialize ADMIN role correctly', () {
+      test('should deserialize admin role correctly', () {
         // Arrange
         const json = {
           'name': 'Admin',
@@ -309,17 +309,17 @@ void main() {
           'phone': '+1234567890',
           'email': 'admin@example.com',
           'password': 'password',
-          'role': 'ADMIN',
+          'role': 'admin',
         };
 
         // Act
         final dto = UserDto.fromJson(json);
 
         // Assert
-        expect(dto.role, equals(RoleDto.ADMIN));
+        expect(dto.role, equals(RoleDto.admin));
       });
 
-      test('should deserialize USER role correctly', () {
+      test('should deserialize user role correctly', () {
         // Arrange
         const json = {
           'name': 'User',
@@ -329,14 +329,14 @@ void main() {
           'phone': '+1234567890',
           'email': 'user@example.com',
           'password': 'password',
-          'role': 'USER',
+          'role': 'user',
         };
 
         // Act
         final dto = UserDto.fromJson(json);
 
         // Assert
-        expect(dto.role, equals(RoleDto.USER));
+        expect(dto.role, equals(RoleDto.user));
       });
     });
   });

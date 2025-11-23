@@ -28,4 +28,4 @@ Map<String, dynamic> _$UserDtoToJson(UserDto instance) => <String, dynamic>{
   'role': _$RoleDtoEnumMap[instance.role]!,
 };
 
-const _$RoleDtoEnumMap = {RoleDto.ADMIN: 'ADMIN', RoleDto.USER: 'USER'};
+const _$RoleDtoEnumMap = {RoleDto.admin: 'admin', RoleDto.user: 'user'};

@@ -34,8 +34,8 @@ extension UserEntityToDtoMapper on User {
 extension UserRoleDtoToEntityMapper on RoleDto {
   Role toEntity() {
     return switch (this) {
-      RoleDto.ADMIN => Role.ADMIN,
-      RoleDto.USER => Role.USER,
+      RoleDto.admin => Role.admin,
+      RoleDto.user => Role.user,
     };
   }
 }
@@ -43,8 +43,8 @@ extension UserRoleDtoToEntityMapper on RoleDto {
 extension UserRoleEntityToDtoMapper on Role {
   RoleDto toDto() {
     return switch (this) {
-      Role.ADMIN => RoleDto.ADMIN,
-      Role.USER => RoleDto.USER,
+      Role.admin => RoleDto.admin,
+      Role.user => RoleDto.user,
     };
   }
 }

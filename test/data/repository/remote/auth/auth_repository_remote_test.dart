@@ -195,8 +195,8 @@ void main() {
           documentNumber: 1234567890,
           address: 'Test Address',
           phone: 'Test Phone',
-          role: RoleDto.USER,
-        );
+          role: RoleDto.user,
+        );  
 
         // Act
         final result = await authRepositoryRemote.register(userData.toEntity());
@@ -219,7 +219,7 @@ void main() {
           documentNumber: 1234567890,
           address: 'Another Address',
           phone: 'Another Phone',
-          role: RoleDto.USER,
+          role: RoleDto.user,
         );
 
         // Act
@@ -244,7 +244,7 @@ void main() {
           documentNumber: 1234567890,
           address: 'Existing Address',
           phone: 'Existing Phone',
-          role: RoleDto.USER,
+          role: RoleDto.user,
         );
 
         // Act & Assert
@@ -271,7 +271,7 @@ void main() {
             documentNumber: 1234567890,
             address: 'Test Address',
             phone: 'Test Phone',
-            role: RoleDto.USER,
+            role: RoleDto.user,
           );
 
           // Act & Assert
@@ -296,7 +296,7 @@ void main() {
           documentNumber: 1234567890,
           address: 'Test Address',
           phone: 'Test Phone',
-          role: RoleDto.USER,
+          role: RoleDto.user,
         );
 
         // Act
@@ -318,7 +318,7 @@ void main() {
           documentNumber: 1234567890,
           address: 'Test Address',
           phone: 'Test Phone',
-          role: RoleDto.USER,
+          role: RoleDto.user,
         );
 
         // Act
