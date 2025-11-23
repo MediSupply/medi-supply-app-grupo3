@@ -89,7 +89,8 @@ class _VisitClientRegisterViewState extends State<VisitClientRegisterView> {
             .where(
               (client) =>
                   client['nombre']!.toLowerCase().contains(query) ||
-                  client['nit']!.toLowerCase().contains(query),
+                  client['nit']!.toLowerCase().contains(query) ||
+                  client['razon_social']!.toLowerCase().contains(query),
             )
             .toList();
       }
@@ -136,7 +137,7 @@ class _VisitClientRegisterViewState extends State<VisitClientRegisterView> {
     if (_formKey.currentState!.validate() &&
         _selectedClient != null &&
         _selectedDateTime != null) {
-      // TODO lógica para guardar la visita
+      // TO DO lógica para guardar la visita
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Visita registrada exitosamente')),
       );
@@ -201,7 +202,7 @@ class _VisitClientRegisterViewState extends State<VisitClientRegisterView> {
                         TextFormField(
                           controller: _clientController,
                           decoration: InputDecoration(
-                            hintText: 'Buscar por nombre o código',
+                            hintText: 'Buscar por nombre, razón social o NIT',
                             prefixIcon: const Icon(Icons.search),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
