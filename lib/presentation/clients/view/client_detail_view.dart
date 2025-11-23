@@ -42,23 +42,50 @@ class _ClientDetailViewState extends State<ClientDetailView> {
     // Mock data
     final mockClients = [
       {
-        'id': '1',
-        'nombre': 'Hospital San Juan',
-        'email': 'juan@medisupply.com',
-        'telefono': '+57 301 1234567',
-        'direccion': 'Cra 5 #10-20, Bogotá',
-        'razon_social': 'Hospital San Juan',
-        'nit': '12345678',
-      },
-      {
-        'id': '2',
-        'nombre': 'Clínica Maria La Paz',
-        'email': 'maria@medisupply.com',
-        'telefono': '+57 302 9876543',
-        'direccion': 'Cll 45 #20-10, Medellín',
-        'razon_social': 'Clínica Maria La Paz',
-        'nit': '987654321',
-      },
+      "id": '1',
+      "nombre": "Clínica Santa María",
+      "email": "contacto@santamaria.com",
+      "telefono": "3004567890",
+      "direccion": "Cra 45 # 32-10, Medellín",
+      "razon_social": "Clínica Santa María S.A.",
+      "nit": "900123456-1",
+    },
+    {
+      "id": '2',
+      "nombre": "Hospital Vida Plena",
+      "email": "info@vidaplena.org",
+      "telefono": "3178902345",
+      "direccion": "Av. Las Palmas # 15-20, Medellín",
+      "razon_social": "Fundación Hospital Vida Plena",
+      "nit": "800987654-3",
+    },
+    {
+      "id": '3',
+      "nombre": "Laboratorio BioTest",
+      "email": "servicio@biotest.com",
+      "telefono": "3156789012",
+      "direccion": "Calle 10 # 40-22, Medellín",
+      "razon_social": "BioTest Laboratorios Clínicos SAS",
+      "nit": "901456789-5",
+    },
+    {
+      "id": '4',
+      "nombre": "Centro Médico El Poblado",
+      "email": "atencion@cmpoblado.co",
+      "telefono": "3103456789",
+      "direccion": "Calle 8 # 43A-05, Medellín",
+      "razon_social": "Centro Médico Integral El Poblado",
+      "nit": "900234567-8",
+    },
+    {
+      "id": '5',
+      "nombre": "Distribuidora FarmaPlus",
+      "email": "ventas@farmaplus.com",
+      "telefono": "3012345678",
+      "direccion": "Calle 30 # 55-90, Medellín",
+      "razon_social": "FarmaPlus Distribuciones SAS",
+      "nit": "901987321-4",
+    },
     ];
 
     // Filtro por nombre o número de documento
@@ -118,7 +145,6 @@ class _ClientDetailViewState extends State<ClientDetailView> {
                   Button(
                     onPressed: _clientDetail,
                     label: 'Buscar',
-                    isLoading: _isLoading,
                   ),
                   const SizedBox(height: 24),
                   if (_isLoading)
