@@ -196,7 +196,7 @@ void main() {
           address: 'Test Address',
           phone: 'Test Phone',
           role: RoleDto.user,
-        );  
+        );
 
         // Act
         final result = await authRepositoryRemote.register(userData.toEntity());

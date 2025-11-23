@@ -220,7 +220,7 @@ void main() {
       expect(state.user.phone, equals('+1234567890'));
       expect(state.user.email, equals('john@example.com'));
       expect(state.user.password, equals('password123'));
-      expect(state.user.role, equals(Role.user)); 
+      expect(state.user.role, equals(Role.user));
     });
 
     test('should handle session with user', () {

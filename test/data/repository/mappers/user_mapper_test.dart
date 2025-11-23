@@ -140,7 +140,7 @@ void main() {
         expect(dto.phone, equals('+1234567890'));
         expect(dto.email, equals('john@example.com'));
         expect(dto.password, equals('password123'));
-          expect(dto.role, equals(RoleDto.user));
+        expect(dto.role, equals(RoleDto.user));
       });
 
       test('should convert User entity with admin role to UserDto', () {
@@ -254,7 +254,7 @@ void main() {
           final role = roleDto.toEntity();
 
           switch (roleDto) {
-                case RoleDto.admin:
+            case RoleDto.admin:
               expect(role, equals(Role.admin));
               break;
             case RoleDto.user:
