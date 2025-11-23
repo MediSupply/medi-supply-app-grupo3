@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../gen/assets.gen.dart';
 import '../../design_system/components/button.dart';
-import '../../design_system/components/input.dart';
-import '../../design_system/components/snack_bar.dart';
-import '../../design_system/tokens/colors.dart';
 
 class ClientDetailView extends StatefulWidget {
   const ClientDetailView({super.key});
