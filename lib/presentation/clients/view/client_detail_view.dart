@@ -42,28 +42,31 @@ class _ClientDetailViewState extends State<ClientDetailView> {
     // Mock data
     final mockClients = [
       {
-        'nombre': 'Juan Pérez García',
-        'tipoDocumento': 'Cédula',
-        'numeroDocumento': '12345678',
-        'direccion': 'Cra 5 #10-20, Bogotá',
-        'telefono': '+57 301 1234567',
+        'id': '1',
+        'nombre': 'Hospital San Juan',
         'email': 'juan@medisupply.com',
+        'telefono': '+57 301 1234567',
+        'direccion': 'Cra 5 #10-20, Bogotá',
+        'razon_social': 'Hospital San Juan',
+        'nit': '12345678',
       },
       {
-        'nombre': 'María Torres',
-        'tipoDocumento': 'Cédula',
-        'numeroDocumento': '987654321',
-        'direccion': 'Cll 45 #20-10, Medellín',
-        'telefono': '+57 302 9876543',
+        'id': '2',
+        'nombre': 'Clínica Maria La Paz',
         'email': 'maria@medisupply.com',
+        'telefono': '+57 302 9876543',
+        'direccion': 'Cll 45 #20-10, Medellín',
+        'razon_social': 'Clínica Maria La Paz',
+        'nit': '987654321',
       },
     ];
 
     // Filtro por nombre o número de documento
     final results = mockClients.where((client) {
       final nombre = client['nombre']!.toLowerCase();
-      final documento = client['numeroDocumento']!.toLowerCase();
-      return nombre.contains(query) || documento.contains(query);
+      final razon_social = client['razon_social']!.toLowerCase();
+      final documento = client['nit']!.toLowerCase();
+      return nombre.contains(query)|| razon_social.contains(query) || documento.contains(query);
     }).toList();
 
     setState(() {
@@ -100,12 +103,13 @@ class _ClientDetailViewState extends State<ClientDetailView> {
                     fit: BoxFit.contain,
                   ),
                   const SizedBox(height: 16),
-                  Text('Consultar de cliente'),
+                  Text('Consulta de cliente'),
                   const SizedBox(height: 16),
                   TextField(
                     controller: _searchController,
                     decoration: InputDecoration(
-                      labelText: 'Nombre o Número de Documento',
+                      labelText:
+                          'Nombre del cliente o número de identificación',
                       border: OutlineInputBorder(),
                       suffixIcon: Icon(Icons.search),
                     ),
@@ -150,15 +154,9 @@ class _ClientDetailViewState extends State<ClientDetailView> {
       columnWidths: const {0: FlexColumnWidth(1), 1: FlexColumnWidth(1.8)},
       children: [
         _buildTableRow('CAMPO', 'DESCRIPCIÓN', isHeader: true),
-        _buildTableRow('Nombre o razón social', _clientData!['nombre'] ?? ''),
-        _buildTableRow(
-          'Tipo de documento',
-          _clientData!['tipoDocumento'] ?? '',
-        ),
-        _buildTableRow(
-          'Número de documento',
-          _clientData!['numeroDocumento'] ?? '',
-        ),
+        _buildTableRow('Nombre del cliente', _clientData!['nombre'] ?? ''),
+        _buildTableRow('Razón social', _clientData!['razon_social'] ?? ''),
+        _buildTableRow('NIT', _clientData!['nit'] ?? ''),
         _buildTableRow('Dirección principal', _clientData!['direccion'] ?? ''),
         _buildTableRow('Teléfono de contacto', _clientData!['telefono'] ?? ''),
         _buildTableRow('Correo electrónico', _clientData!['email'] ?? ''),
