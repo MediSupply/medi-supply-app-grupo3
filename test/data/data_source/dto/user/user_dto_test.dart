@@ -205,7 +205,7 @@ void main() {
       expect(dto.email, equals('josé.maría@ejemplo.com'));
       expect(dto.password, equals('P@ssw0rd!@#\$%^&*()'));
       expect(dto.role, equals(RoleDto.user));
-    });   
+    });
 
     test('should handle large numbers', () {
       // Arrange & Act
@@ -289,7 +289,7 @@ void main() {
           phone: '+1234567890',
           email: 'user@example.com',
           password: 'password',
-            role: RoleDto.user,
+          role: RoleDto.user,
         );
 
         // Act
