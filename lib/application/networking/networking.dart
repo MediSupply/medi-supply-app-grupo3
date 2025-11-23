@@ -7,7 +7,7 @@ class Networking {
   Networking._internal() {
     dio = Dio(
       BaseOptions(
-        baseUrl: 'http://192.168.1.50:5000',
+        baseUrl: 'http://127.0.0.1:5001',
         connectTimeout: const Duration(seconds: 10),
         receiveTimeout: const Duration(seconds: 10),
       ),
