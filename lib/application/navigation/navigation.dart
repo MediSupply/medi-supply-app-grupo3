@@ -58,7 +58,7 @@ class MediSupplyNavigation {
           return CreateOrderView(role: role);
         },
       ),
-      
+
       GoRoute(
         path: _clientDetailScreen,
         name: _clientDetailScreen,
@@ -87,7 +87,7 @@ class MediSupplyNavigation {
     context.pushNamed(_createOrderScreen, extra: role);
   }
 
-    static void goToClientDetail(BuildContext context) {
+  static void goToClientDetail(BuildContext context) {
     context.pushNamed(_clientDetailScreen);
   }
 }
