@@ -6,6 +6,7 @@ import '../../design_system/components/button.dart';
 import '../../design_system/components/input.dart';
 import '../../design_system/components/snack_bar.dart';
 import '../../design_system/tokens/colors.dart';
+import 'visit_save.dart';
 
 class VisitClientRegisterView extends StatefulWidget {
   const VisitClientRegisterView({super.key});
@@ -133,11 +134,19 @@ class _VisitClientRegisterViewState extends State<VisitClientRegisterView> {
     }
   }
 
-  void _saveVisit() {
+  void _saveVisit() async {
     if (_formKey.currentState!.validate() &&
         _selectedClient != null &&
         _selectedDateTime != null) {
-      // TO DO lógica para guardar la visita
+      
+      //lógica para guardar la visita
+      await VisitLocalStorage.saveVisit({
+        "cliente": _selectedClient,
+        "fecha_hora": _selectedDateTime?.toIso8601String(),
+        "observaciones": _observationsController.text,
+      });
+
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Visita registrada exitosamente')),
       );
