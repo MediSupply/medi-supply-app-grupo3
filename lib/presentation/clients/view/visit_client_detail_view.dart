@@ -6,6 +6,8 @@ import '../../design_system/components/button.dart';
 import '../../design_system/components/input.dart';
 import '../../design_system/components/snack_bar.dart';
 import '../../design_system/tokens/colors.dart';
+import 'visit_save.dart';
+import 'package:intl/intl.dart';
 
 class VisitClientDetailView extends StatefulWidget {
   const VisitClientDetailView({Key? key}) : super(key: key);
@@ -21,67 +23,51 @@ class _VisitClientDetailViewState extends State<VisitClientDetailView> {
   String? _selectedVisitId;
 
   @override
+  void initState() {
+    super.initState();
+    _loadClientsFromStorage();
+  }
+
+  @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
   }
 
   // Mock data
-  final List<Map<String, dynamic>> _allClients = [
-    {
-      "id": '1',
-      "nombre": "Clínica Santa María",
-      "email": "contacto@santamaria.com",
-      "telefono": "3004567890",
-      "direccion": "Cra 45 # 32-10, Medellín",
-      "razon_social": "Clínica Santa María S.A.",
-      "nit": "900123456-1",
-      "visitas": [
-        {
-          "id": "V-101",
-          "fecha": "2025-01-15 10:30 AM",
-          "observaciones":
-              "Se revisaron productos nuevos. Interés en insumos quirúrgicos.",
-          "vendedor": "Ana López",
-        },
-        {
-          "id": "V-102",
-          "fecha": "2025-01-10 4:10 PM",
-          "observaciones": "Cliente solicitó lista de precios actualizada.",
-          "vendedor": "Juan Pérez",
-        },
-      ],
-    },
-    {
-      "id": '2',
-      "nombre": "Hospital Vida Plena",
-      "email": "info@vidaplena.org",
-      "telefono": "3178902345",
-      "direccion": "Av. Las Palmas # 15-20, Medellín",
-      "razon_social": "Fundación Hospital Vida Plena",
-      "nit": "800987654-3",
-      "visitas": [
-        {
-          "id": "V-201",
-          "fecha": "2025-01-18 9:00 AM",
-          "observaciones": "Se realizó demostración de equipos biomédicos.",
-          "vendedor": "María Gómez",
-        },
-        {
-          "id": "V-204",
-          "fecha": "2025-01-20 11:00 AM",
-          "observaciones": "Se realizó demostración de equipos quirúrgicos.",
-          "vendedor": "María Gómez",
-        },
-      ],
-    },
-  ];
+  List<Map<String, dynamic>> _allClients = [];
 
   Map<String, dynamic>? get selectedClient =>
       _allClients.firstWhere((c) => c["id"] == _selectedClientId);
 
   Map<String, dynamic>? get selectedVisit =>
       selectedClient?["visitas"].firstWhere((v) => v["id"] == _selectedVisitId);
+
+  Future<void> _loadClientsFromStorage() async {
+    final visits = await VisitLocalStorage.getVisits();
+
+    final Map<String, Map<String, dynamic>> grouped = {};
+
+    for (final v in visits) {
+      final cliente = v["cliente"];
+      final id = cliente["id"];
+
+      if (!grouped.containsKey(id)) {
+        grouped[id] = {...cliente, "visitas": []};
+      }
+
+      grouped[id]!["visitas"].add({
+        "id": v["id"] ?? "",
+        "fecha": v["fecha_hora"] ?? "",
+        "observaciones": v["observaciones"] ?? "",
+        "vendedor": v["vendedor"] ?? "",
+      });
+    }
+
+    setState(() {
+      _allClients = grouped.values.toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -371,7 +357,9 @@ class _VisitClientDetailViewState extends State<VisitClientDetailView> {
                                         horizontal: 12,
                                       ),
                                       child: Text(
-                                        visit["fecha"],
+                                        DateFormat('dd/MM/yyyy hh:mm a').format(
+                                          DateTime.parse(visit["fecha"]),
+                                        ),
                                         style: const TextStyle(fontSize: 14),
                                       ),
                                     ),
@@ -423,14 +411,14 @@ class _VisitClientDetailViewState extends State<VisitClientDetailView> {
               label: 'Volver',
               onPressed: () {
                 setState(() {
-                  _selectedClientId = null; 
-                  _selectedVisitId = null; 
-                  _showVisitDetail = false; 
-                  _searchController.clear(); 
+                  _selectedClientId = null;
+                  _selectedVisitId = null;
+                  _showVisitDetail = false;
+                  _searchController.clear();
                 });
               },
+            ),
           ),
-        ),
         ),
         const SizedBox(height: 24),
       ],
@@ -445,22 +433,20 @@ class _VisitClientDetailViewState extends State<VisitClientDetailView> {
       children: [
         Text(
           'Detalle de la visita ' + visit!["id"],
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
 
         buildVisitTable(
-          fechaHora: visit?["fecha"],
+          fechaHora: DateFormat('dd/MM/yyyy hh:mm a').format(
+                                          DateTime.parse(visit["fecha"]),
+                                        ),
           observaciones: visit?["observaciones"],
           vendedor: visit?["vendedor"],
         ),
         const SizedBox(height: 16),
 
         const SizedBox(height: 32),
-        
       ],
     );
   }

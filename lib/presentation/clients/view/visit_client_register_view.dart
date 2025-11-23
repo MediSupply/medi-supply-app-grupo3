@@ -138,14 +138,14 @@ class _VisitClientRegisterViewState extends State<VisitClientRegisterView> {
     if (_formKey.currentState!.validate() &&
         _selectedClient != null &&
         _selectedDateTime != null) {
-      
       //lógica para guardar la visita
+
       await VisitLocalStorage.saveVisit({
         "cliente": _selectedClient,
         "fecha_hora": _selectedDateTime?.toIso8601String(),
         "observaciones": _observationsController.text,
+        "vendedor": "Vendedor"
       });
-
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Visita registrada exitosamente')),
