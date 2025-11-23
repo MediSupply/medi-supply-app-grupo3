@@ -38,58 +38,60 @@ class _ClientDetailViewState extends State<ClientDetailView> {
     // Mock data
     final mockClients = [
       {
-      "id": '1',
-      "nombre": "Clínica Santa María",
-      "email": "contacto@santamaria.com",
-      "telefono": "3004567890",
-      "direccion": "Cra 45 # 32-10, Medellín",
-      "razon_social": "Clínica Santa María S.A.",
-      "nit": "900123456-1",
-    },
-    {
-      "id": '2',
-      "nombre": "Hospital Vida Plena",
-      "email": "info@vidaplena.org",
-      "telefono": "3178902345",
-      "direccion": "Av. Las Palmas # 15-20, Medellín",
-      "razon_social": "Fundación Hospital Vida Plena",
-      "nit": "800987654-3",
-    },
-    {
-      "id": '3',
-      "nombre": "Laboratorio BioTest",
-      "email": "servicio@biotest.com",
-      "telefono": "3156789012",
-      "direccion": "Calle 10 # 40-22, Medellín",
-      "razon_social": "BioTest Laboratorios Clínicos SAS",
-      "nit": "901456789-5",
-    },
-    {
-      "id": '4',
-      "nombre": "Centro Médico El Poblado",
-      "email": "atencion@cmpoblado.co",
-      "telefono": "3103456789",
-      "direccion": "Calle 8 # 43A-05, Medellín",
-      "razon_social": "Centro Médico Integral El Poblado",
-      "nit": "900234567-8",
-    },
-    {
-      "id": '5',
-      "nombre": "Distribuidora FarmaPlus",
-      "email": "ventas@farmaplus.com",
-      "telefono": "3012345678",
-      "direccion": "Calle 30 # 55-90, Medellín",
-      "razon_social": "FarmaPlus Distribuciones SAS",
-      "nit": "901987321-4",
-    },
+        "id": '1',
+        "nombre": "Clínica Santa María",
+        "email": "contacto@santamaria.com",
+        "telefono": "3004567890",
+        "direccion": "Cra 45 # 32-10, Medellín",
+        "razon_social": "Clínica Santa María S.A.",
+        "nit": "900123456-1",
+      },
+      {
+        "id": '2',
+        "nombre": "Hospital Vida Plena",
+        "email": "info@vidaplena.org",
+        "telefono": "3178902345",
+        "direccion": "Av. Las Palmas # 15-20, Medellín",
+        "razon_social": "Fundación Hospital Vida Plena",
+        "nit": "800987654-3",
+      },
+      {
+        "id": '3',
+        "nombre": "Laboratorio BioTest",
+        "email": "servicio@biotest.com",
+        "telefono": "3156789012",
+        "direccion": "Calle 10 # 40-22, Medellín",
+        "razon_social": "BioTest Laboratorios Clínicos SAS",
+        "nit": "901456789-5",
+      },
+      {
+        "id": '4',
+        "nombre": "Centro Médico El Poblado",
+        "email": "atencion@cmpoblado.co",
+        "telefono": "3103456789",
+        "direccion": "Calle 8 # 43A-05, Medellín",
+        "razon_social": "Centro Médico Integral El Poblado",
+        "nit": "900234567-8",
+      },
+      {
+        "id": '5',
+        "nombre": "Distribuidora FarmaPlus",
+        "email": "ventas@farmaplus.com",
+        "telefono": "3012345678",
+        "direccion": "Calle 30 # 55-90, Medellín",
+        "razon_social": "FarmaPlus Distribuciones SAS",
+        "nit": "901987321-4",
+      },
     ];
 
     // Filtro por nombre o número de documento
     final results = mockClients.where((client) {
       final nombre = client['nombre']!.toLowerCase();
-      final razon_social = client['razon_social']!.toLowerCase();
+      final razonSocial = client['razon_social']!.toLowerCase();
       final documento = client['nit']!.toLowerCase();
-      return nombre.contains(query)|| razon_social.contains(query) || documento.contains(query);
+      return nombre.contains(query) ||
+          razonSocial.contains(query) ||
+          documento.contains(query);
     }).toList();
 
     setState(() {
@@ -138,10 +140,7 @@ class _ClientDetailViewState extends State<ClientDetailView> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  Button(
-                    onPressed: _clientDetail,
-                    label: 'Buscar',
-                  ),
+                  Button(onPressed: _clientDetail, label: 'Buscar'),
                   const SizedBox(height: 24),
                   if (_isLoading)
                     const CircularProgressIndicator()
