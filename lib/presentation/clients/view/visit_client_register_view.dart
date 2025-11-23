@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../gen/assets.gen.dart';
 import '../../design_system/components/button.dart';
-import '../../design_system/components/input.dart';
-import '../../design_system/components/snack_bar.dart';
-import '../../design_system/tokens/colors.dart';
 import 'visit_save.dart';
 
 class VisitClientRegisterView extends StatefulWidget {
@@ -138,16 +134,18 @@ class _VisitClientRegisterViewState extends State<VisitClientRegisterView> {
     if (_formKey.currentState!.validate() &&
         _selectedClient != null &&
         _selectedDateTime != null) {
-      
       //lógica para guardar la visita
+      if (!mounted) return;
+      final messenger = ScaffoldMessenger.of(context);
+
       await VisitLocalStorage.saveVisit({
         "cliente": _selectedClient,
         "fecha_hora": _selectedDateTime?.toIso8601String(),
         "observaciones": _observationsController.text,
       });
 
-
-      ScaffoldMessenger.of(context).showSnackBar(
+      if (!mounted) return;
+      messenger.showSnackBar(
         const SnackBar(content: Text('Visita registrada exitosamente')),
       );
       _resetForm();
