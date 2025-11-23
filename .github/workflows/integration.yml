@@ -29,6 +29,9 @@ jobs:
       - name: Instalar dependencias
         run: flutter pub get
 
+      - name: Generar archivos de código
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
       - name: Analizar código
         run: flutter analyze --fatal-infos
 
