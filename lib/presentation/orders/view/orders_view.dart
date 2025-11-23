@@ -34,7 +34,7 @@ class OrdersView extends StatelessWidget {
         return (
           'Crear pedido',
           Assets.icons.addUserIcon.svg(width: 24, height: 24),
-          () => MediSupplyNavigation.goToCreateOrder(context, Role.ADMIN),
+          () => MediSupplyNavigation.goToCreateOrder(context, Role.admin),
         );
       case 1:
         return (

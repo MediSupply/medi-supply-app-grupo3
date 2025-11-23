@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-enum Role { ADMIN, USER }
+enum Role { admin, user }
 
 class User extends Equatable {
   const User({
@@ -11,7 +11,7 @@ class User extends Equatable {
     this.phone = '',
     this.email = '',
     this.password = '',
-    this.role = Role.ADMIN,
+    this.role = Role.admin,
   });
 
   // nombres y apellidos o razón social

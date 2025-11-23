@@ -16,7 +16,7 @@ void main() {
           phone: '+1234567890',
           email: 'john@example.com',
           password: 'password123',
-          role: RoleDto.USER,
+          role: RoleDto.user,
         );
 
         // Act
@@ -30,10 +30,10 @@ void main() {
         expect(entity.phone, equals('+1234567890'));
         expect(entity.email, equals('john@example.com'));
         expect(entity.password, equals('password123'));
-        expect(entity.role, equals(Role.USER));
+        expect(entity.role, equals(Role.user));
       });
 
-      test('should convert UserDto with ADMIN role to User entity', () {
+      test('should convert UserDto with admin role to User entity', () {
         // Arrange
         final dto = UserDto(
           name: 'Admin User',
@@ -43,7 +43,7 @@ void main() {
           phone: '+0987654321',
           email: 'admin@example.com',
           password: 'admin123',
-          role: RoleDto.ADMIN,
+          role: RoleDto.admin,
         );
 
         // Act
@@ -57,7 +57,7 @@ void main() {
         expect(entity.phone, equals('+0987654321'));
         expect(entity.email, equals('admin@example.com'));
         expect(entity.password, equals('admin123'));
-        expect(entity.role, equals(Role.ADMIN));
+        expect(entity.role, equals(Role.admin));
       });
 
       test('should convert UserDto with empty values to User entity', () {
@@ -70,7 +70,7 @@ void main() {
           phone: '',
           email: '',
           password: '',
-          role: RoleDto.USER,
+          role: RoleDto.user,
         );
 
         // Act
@@ -84,7 +84,7 @@ void main() {
         expect(entity.phone, equals(''));
         expect(entity.email, equals(''));
         expect(entity.password, equals(''));
-        expect(entity.role, equals(Role.USER));
+        expect(entity.role, equals(Role.user));
       });
 
       test('should convert UserDto with special characters to User entity', () {
@@ -97,7 +97,7 @@ void main() {
           phone: '+57 300 123 4567',
           email: 'josé.maría@ejemplo.com',
           password: 'P@ssw0rd!@#\$%^&*()',
-          role: RoleDto.USER,
+          role: RoleDto.user,
         );
 
         // Act
@@ -111,7 +111,7 @@ void main() {
         expect(entity.phone, equals('+57 300 123 4567'));
         expect(entity.email, equals('josé.maría@ejemplo.com'));
         expect(entity.password, equals('P@ssw0rd!@#\$%^&*()'));
-        expect(entity.role, equals(Role.USER));
+        expect(entity.role, equals(Role.user));
       });
     });
 
@@ -126,7 +126,7 @@ void main() {
           phone: '+1234567890',
           email: 'john@example.com',
           password: 'password123',
-          role: Role.USER,
+          role: Role.user,
         );
 
         // Act
@@ -140,10 +140,10 @@ void main() {
         expect(dto.phone, equals('+1234567890'));
         expect(dto.email, equals('john@example.com'));
         expect(dto.password, equals('password123'));
-        expect(dto.role, equals(RoleDto.USER));
+          expect(dto.role, equals(RoleDto.user));
       });
 
-      test('should convert User entity with ADMIN role to UserDto', () {
+      test('should convert User entity with admin role to UserDto', () {
         // Arrange
         const entity = User(
           name: 'Admin User',
@@ -153,7 +153,7 @@ void main() {
           phone: '+0987654321',
           email: 'admin@example.com',
           password: 'admin123',
-          role: Role.ADMIN,
+          role: Role.admin,
         );
 
         // Act
@@ -167,7 +167,7 @@ void main() {
         expect(dto.phone, equals('+0987654321'));
         expect(dto.email, equals('admin@example.com'));
         expect(dto.password, equals('admin123'));
-        expect(dto.role, equals(RoleDto.ADMIN));
+        expect(dto.role, equals(RoleDto.admin));
       });
 
       test('should convert User entity with empty values to UserDto', () {
@@ -180,7 +180,7 @@ void main() {
           phone: '',
           email: '',
           password: '',
-          role: Role.USER,
+          role: Role.user,
         );
 
         // Act
@@ -194,7 +194,7 @@ void main() {
         expect(dto.phone, equals(''));
         expect(dto.email, equals(''));
         expect(dto.password, equals(''));
-        expect(dto.role, equals(RoleDto.USER));
+        expect(dto.role, equals(RoleDto.user));
       });
 
       test('should convert User entity with special characters to UserDto', () {
@@ -207,7 +207,7 @@ void main() {
           phone: '+57 300 123 4567',
           email: 'josé.maría@ejemplo.com',
           password: 'P@ssw0rd!@#\$%^&*()',
-          role: Role.USER,
+          role: Role.user,
         );
 
         // Act
@@ -221,31 +221,31 @@ void main() {
         expect(dto.phone, equals('+57 300 123 4567'));
         expect(dto.email, equals('josé.maría@ejemplo.com'));
         expect(dto.password, equals('P@ssw0rd!@#\$%^&*()'));
-        expect(dto.role, equals(RoleDto.USER));
+        expect(dto.role, equals(RoleDto.user));
       });
     });
 
     group('UserRoleDtoToEntityMapper', () {
-      test('should convert RoleDto.ADMIN to Role.ADMIN', () {
+      test('should convert RoleDto.admin to Role.admin', () {
         // Arrange
-        const roleDto = RoleDto.ADMIN;
+        const roleDto = RoleDto.admin;
 
         // Act
         final role = roleDto.toEntity();
 
         // Assert
-        expect(role, equals(Role.ADMIN));
+        expect(role, equals(Role.admin));
       });
 
       test('should convert RoleDto.USER to Role.USER', () {
         // Arrange
-        const roleDto = RoleDto.USER;
+        const roleDto = RoleDto.user;
 
         // Act
         final role = roleDto.toEntity();
 
         // Assert
-        expect(role, equals(Role.USER));
+        expect(role, equals(Role.user));
       });
 
       test('should handle all RoleDto values', () {
@@ -254,11 +254,11 @@ void main() {
           final role = roleDto.toEntity();
 
           switch (roleDto) {
-            case RoleDto.ADMIN:
-              expect(role, equals(Role.ADMIN));
+                case RoleDto.admin:
+              expect(role, equals(Role.admin));
               break;
-            case RoleDto.USER:
-              expect(role, equals(Role.USER));
+            case RoleDto.user:
+              expect(role, equals(Role.user));
               break;
           }
         }
@@ -266,26 +266,26 @@ void main() {
     });
 
     group('UserRoleEntityToDtoMapper', () {
-      test('should convert Role.ADMIN to RoleDto.ADMIN', () {
+      test('should convert Role.admin to RoleDto.admin', () {
         // Arrange
-        const role = Role.ADMIN;
+        const role = Role.admin;
 
         // Act
         final roleDto = role.toDto();
 
         // Assert
-        expect(roleDto, equals(RoleDto.ADMIN));
+        expect(roleDto, equals(RoleDto.admin));
       });
 
-      test('should convert Role.USER to RoleDto.USER', () {
+      test('should convert Role.user to RoleDto.user', () {
         // Arrange
-        const role = Role.USER;
+        const role = Role.user;
 
         // Act
         final roleDto = role.toDto();
 
         // Assert
-        expect(roleDto, equals(RoleDto.USER));
+        expect(roleDto, equals(RoleDto.user));
       });
 
       test('should handle all Role values', () {
@@ -294,11 +294,11 @@ void main() {
           final roleDto = role.toDto();
 
           switch (role) {
-            case Role.ADMIN:
-              expect(roleDto, equals(RoleDto.ADMIN));
+            case Role.admin:
+              expect(roleDto, equals(RoleDto.admin));
               break;
-            case Role.USER:
-              expect(roleDto, equals(RoleDto.USER));
+            case Role.user:
+              expect(roleDto, equals(RoleDto.user));
               break;
           }
         }
@@ -318,7 +318,7 @@ void main() {
             phone: '+1234567890',
             email: 'john@example.com',
             password: 'password123',
-            role: RoleDto.USER,
+            role: RoleDto.user,
           );
 
           // Act
@@ -352,7 +352,7 @@ void main() {
             phone: '+1234567890',
             email: 'john@example.com',
             password: 'password123',
-            role: Role.USER,
+            role: Role.user,
           );
 
           // Act
@@ -377,7 +377,7 @@ void main() {
         },
       );
 
-      test('should maintain data integrity with ADMIN role', () {
+      test('should maintain data integrity with admin role', () {
         // Arrange
         final originalDto = UserDto(
           name: 'Admin User',
@@ -387,7 +387,7 @@ void main() {
           phone: '+0987654321',
           email: 'admin@example.com',
           password: 'admin123',
-          role: RoleDto.ADMIN,
+          role: RoleDto.admin,
         );
 
         // Act
@@ -395,8 +395,8 @@ void main() {
         final convertedDto = entity.toDto();
 
         // Assert
-        expect(convertedDto.role, equals(RoleDto.ADMIN));
-        expect(entity.role, equals(Role.ADMIN));
+        expect(convertedDto.role, equals(RoleDto.admin));
+        expect(entity.role, equals(Role.admin));
       });
     });
   });

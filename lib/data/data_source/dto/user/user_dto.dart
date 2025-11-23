@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_dto.g.dart';
 
-enum RoleDto { ADMIN, USER }
+enum RoleDto { admin, user }
 
 @JsonSerializable()
 class UserDto {

@@ -16,12 +16,12 @@ class PagesBuilder {
 
   static List<Widget> makePages(Role role) {
     return switch (role) {
-      Role.ADMIN => [
+      Role.admin => [
         const ClientSelectorPage(),
         const ProductsSelectorPage(),
         const OrderDetailPage(),
       ],
-      Role.USER => [const ProductsSelectorPage(), const OrderDetailPage()],
+      Role.user => [const ProductsSelectorPage(), const OrderDetailPage()],
     };
   }
 }
@@ -45,7 +45,7 @@ class _CreateOrderViewState extends ConsumerState<CreateOrderView> {
     super.initState();
     _pageController = PageController();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (widget.role == Role.ADMIN) {
+      if (widget.role == Role.admin) {
         ref.read(createOrderViewModelProvider.notifier).getClients();
       }
       ref.read(createOrderViewModelProvider.notifier).getProducts();

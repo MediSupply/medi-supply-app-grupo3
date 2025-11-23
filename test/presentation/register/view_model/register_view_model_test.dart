@@ -63,9 +63,9 @@ void main() {
       expect(viewModel.state.user.phone, equals('800-8000'));
     });
 
-    test('default user role is ADMIN', () {
+    test('default user role is admin', () {
       final viewModel = container.read(registerViewModelProvider.notifier);
-      expect(viewModel.state.user.role, equals(Role.ADMIN));
+      expect(viewModel.state.user.role, equals(Role.admin));
     });
 
     group('validation', () {
@@ -126,7 +126,7 @@ void main() {
       expect(u.documentNumber, equals(0));
       expect(u.address, equals(''));
       expect(u.phone, equals(''));
-      expect(u.role, equals(Role.ADMIN));
+      expect(u.role, equals(Role.admin));
     });
   });
 }
