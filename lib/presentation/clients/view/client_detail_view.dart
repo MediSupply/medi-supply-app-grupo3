@@ -43,7 +43,7 @@ class _ClientDetailViewState extends State<ClientDetailView> {
         "email": "contacto@santamaria.com",
         "telefono": "3004567890",
         "direccion": "Cra 45 # 32-10, Medellín",
-        "razon_social": "Clínica Santa María S.A.",
+        "razonSocial": "Clínica Santa María S.A.",
         "nit": "900123456-1",
       },
       {
@@ -52,7 +52,7 @@ class _ClientDetailViewState extends State<ClientDetailView> {
         "email": "info@vidaplena.org",
         "telefono": "3178902345",
         "direccion": "Av. Las Palmas # 15-20, Medellín",
-        "razon_social": "Fundación Hospital Vida Plena",
+        "razonSocial": "Fundación Hospital Vida Plena",
         "nit": "800987654-3",
       },
       {
@@ -61,7 +61,7 @@ class _ClientDetailViewState extends State<ClientDetailView> {
         "email": "servicio@biotest.com",
         "telefono": "3156789012",
         "direccion": "Calle 10 # 40-22, Medellín",
-        "razon_social": "BioTest Laboratorios Clínicos SAS",
+        "razonSocial": "BioTest Laboratorios Clínicos SAS",
         "nit": "901456789-5",
       },
       {
@@ -70,7 +70,7 @@ class _ClientDetailViewState extends State<ClientDetailView> {
         "email": "atencion@cmpoblado.co",
         "telefono": "3103456789",
         "direccion": "Calle 8 # 43A-05, Medellín",
-        "razon_social": "Centro Médico Integral El Poblado",
+        "razonSocial": "Centro Médico Integral El Poblado",
         "nit": "900234567-8",
       },
       {
@@ -79,7 +79,7 @@ class _ClientDetailViewState extends State<ClientDetailView> {
         "email": "ventas@farmaplus.com",
         "telefono": "3012345678",
         "direccion": "Calle 30 # 55-90, Medellín",
-        "razon_social": "FarmaPlus Distribuciones SAS",
+        "razonSocial": "FarmaPlus Distribuciones SAS",
         "nit": "901987321-4",
       },
     ];
@@ -87,7 +87,7 @@ class _ClientDetailViewState extends State<ClientDetailView> {
     // Filtro por nombre o número de documento
     final results = mockClients.where((client) {
       final nombre = client['nombre']!.toLowerCase();
-      final razonSocial = client['razon_social']!.toLowerCase();
+      final razonSocial = client['razonSocial']!.toLowerCase();
       final documento = client['nit']!.toLowerCase();
       return nombre.contains(query) ||
           razonSocial.contains(query) ||
@@ -129,10 +129,13 @@ class _ClientDetailViewState extends State<ClientDetailView> {
                   ),
                   const SizedBox(height: 16),
                   Text('Consulta de cliente'),
+                  Text('Consulta de cliente'),
                   const SizedBox(height: 16),
                   TextField(
                     controller: _searchController,
                     decoration: InputDecoration(
+                      labelText:
+                          'Nombre del cliente o número de identificación',
                       labelText:
                           'Nombre del cliente o número de identificación',
                       border: OutlineInputBorder(),
@@ -140,6 +143,7 @@ class _ClientDetailViewState extends State<ClientDetailView> {
                     ),
                   ),
                   const SizedBox(height: 16),
+                  Button(onPressed: _clientDetail, label: 'Buscar'),
                   Button(onPressed: _clientDetail, label: 'Buscar'),
                   const SizedBox(height: 24),
                   if (_isLoading)
@@ -176,7 +180,7 @@ class _ClientDetailViewState extends State<ClientDetailView> {
       children: [
         _buildTableRow('CAMPO', 'DESCRIPCIÓN', isHeader: true),
         _buildTableRow('Nombre del cliente', _clientData!['nombre'] ?? ''),
-        _buildTableRow('Razón social', _clientData!['razon_social'] ?? ''),
+        _buildTableRow('Razón social', _clientData!['razonSocial'] ?? ''),
         _buildTableRow('NIT', _clientData!['nit'] ?? ''),
         _buildTableRow('Dirección principal', _clientData!['direccion'] ?? ''),
         _buildTableRow('Teléfono de contacto', _clientData!['telefono'] ?? ''),

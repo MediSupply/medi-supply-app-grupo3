@@ -21,7 +21,7 @@ class MediSupplyNavigation {
   static const String _clientDetailScreen = '/clients/detail';
   static const String _createOrderScreen = '/orders/create';
   static const String _visitClientRegisterScreen = '/clients/visit_register';
-  static const String _visitClientDetailScreen = '/clients/visit_detail'; 
+  static const String _visitClientDetailScreen = '/clients/visit_detail';
 
   static final GoRouter router = GoRouter(
     initialLocation: _splashScreen,
