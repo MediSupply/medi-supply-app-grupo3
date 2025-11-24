@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../gen/assets.gen.dart';
 import '../../clients/view/clients_view.dart';
 import '../../design_system/tokens/colors.dart';
+import '../../feedback/view/feedback_view.dart';
 import '../../orders/view/orders_view.dart';
 
 class HomeView extends StatefulWidget {
@@ -80,7 +81,7 @@ class _HomeViewState extends State<HomeView> {
                 children: [
                   const OrdersView(),
                   const ClientsView(),
-                  Container(color: ColorsTokens.primary),
+                  const FeedbackView(),
                 ],
               ),
             ),

@@ -136,8 +136,6 @@ class _ClientDetailViewState extends State<ClientDetailView> {
                     decoration: InputDecoration(
                       labelText:
                           'Nombre del cliente o número de identificación',
-                      labelText:
-                          'Nombre del cliente o número de identificación',
                       border: OutlineInputBorder(),
                       suffixIcon: Icon(Icons.search),
                     ),

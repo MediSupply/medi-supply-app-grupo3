@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../data/repository/entity/user/user.dart';
 import '../../presentation/clients/view/register_client_view.dart';
+import '../../presentation/feedback/view/feedback_products_view.dart';
 import '../../presentation/home/view/home_view.dart';
 import '../../presentation/login/view/login_view.dart';
 import '../../presentation/orders/view/create_order_view.dart';
@@ -22,6 +23,7 @@ class MediSupplyNavigation {
   static const String _createOrderScreen = '/orders/create';
   static const String _visitClientRegisterScreen = '/clients/visit_register';
   static const String _visitClientDetailScreen = '/clients/visit_detail';
+  static const String _feedbackProductsScreen = '/feedback/products';
 
   static final GoRouter router = GoRouter(
     initialLocation: _splashScreen,
@@ -61,6 +63,11 @@ class MediSupplyNavigation {
           );
           return CreateOrderView(role: role);
         },
+      ),
+      GoRoute(
+        path: _feedbackProductsScreen,
+        name: _feedbackProductsScreen,
+        builder: (context, state) => FeedbackProductsView(),
       ),
       GoRoute(
         path: _clientDetailScreen,
@@ -110,5 +117,9 @@ class MediSupplyNavigation {
 
   static void goToVisitClientDetail(BuildContext context) {
     context.pushNamed(_visitClientDetailScreen);
+  }
+
+  static void goToFeedbackProducts(BuildContext context) {
+    context.pushNamed(_feedbackProductsScreen);
   }
 }
