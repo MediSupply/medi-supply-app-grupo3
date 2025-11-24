@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../gen/assets.gen.dart';
 import '../../design_system/components/button.dart';
-import '../../design_system/components/input.dart';
-import '../../design_system/components/snack_bar.dart';
-import '../../design_system/tokens/colors.dart';
+import 'visit_save.dart';
+import 'package:intl/intl.dart';
 
 class VisitClientDetailView extends StatefulWidget {
-  const VisitClientDetailView({Key? key}) : super(key: key);
+  const VisitClientDetailView({super.key});
 
   @override
   State<VisitClientDetailView> createState() => _VisitClientDetailViewState();
@@ -21,67 +19,51 @@ class _VisitClientDetailViewState extends State<VisitClientDetailView> {
   String? _selectedVisitId;
 
   @override
+  void initState() {
+    super.initState();
+    _loadClientsFromStorage();
+  }
+
+  @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
   }
 
   // Mock data
-  final List<Map<String, dynamic>> _allClients = [
-    {
-      "id": '1',
-      "nombre": "Clínica Santa María",
-      "email": "contacto@santamaria.com",
-      "telefono": "3004567890",
-      "direccion": "Cra 45 # 32-10, Medellín",
-      "razon_social": "Clínica Santa María S.A.",
-      "nit": "900123456-1",
-      "visitas": [
-        {
-          "id": "V-101",
-          "fecha": "2025-01-15 10:30 AM",
-          "observaciones":
-              "Se revisaron productos nuevos. Interés en insumos quirúrgicos.",
-          "vendedor": "Ana López",
-        },
-        {
-          "id": "V-102",
-          "fecha": "2025-01-10 4:10 PM",
-          "observaciones": "Cliente solicitó lista de precios actualizada.",
-          "vendedor": "Juan Pérez",
-        },
-      ],
-    },
-    {
-      "id": '2',
-      "nombre": "Hospital Vida Plena",
-      "email": "info@vidaplena.org",
-      "telefono": "3178902345",
-      "direccion": "Av. Las Palmas # 15-20, Medellín",
-      "razon_social": "Fundación Hospital Vida Plena",
-      "nit": "800987654-3",
-      "visitas": [
-        {
-          "id": "V-201",
-          "fecha": "2025-01-18 9:00 AM",
-          "observaciones": "Se realizó demostración de equipos biomédicos.",
-          "vendedor": "María Gómez",
-        },
-        {
-          "id": "V-204",
-          "fecha": "2025-01-20 11:00 AM",
-          "observaciones": "Se realizó demostración de equipos quirúrgicos.",
-          "vendedor": "María Gómez",
-        },
-      ],
-    },
-  ];
+  List<Map<String, dynamic>> _allClients = [];
 
   Map<String, dynamic>? get selectedClient =>
       _allClients.firstWhere((c) => c["id"] == _selectedClientId);
 
   Map<String, dynamic>? get selectedVisit =>
       selectedClient?["visitas"].firstWhere((v) => v["id"] == _selectedVisitId);
+
+  Future<void> _loadClientsFromStorage() async {
+    final visits = await VisitLocalStorage.getVisits();
+
+    final Map<String, Map<String, dynamic>> grouped = {};
+
+    for (final v in visits) {
+      final cliente = v["cliente"];
+      final id = cliente["id"];
+
+      if (!grouped.containsKey(id)) {
+        grouped[id] = {...cliente, "visitas": []};
+      }
+
+      grouped[id]!["visitas"].add({
+        "id": v["id"] ?? "",
+        "fecha": v["fecha_hora"] ?? "",
+        "observaciones": v["observaciones"] ?? "",
+        "vendedor": v["vendedor"] ?? "",
+      });
+    }
+
+    setState(() {
+      _allClients = grouped.values.toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -151,188 +133,290 @@ class _VisitClientDetailViewState extends State<VisitClientDetailView> {
     );
   }
 
+  Widget _buildClientList() {
+    final search = _searchController.text.toLowerCase();
 
+    if (search.isEmpty) {
+      return const Center(
+        child: Text(
+          "Escribe para buscar un cliente",
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        ),
+      );
+    }
 
-Widget _buildClientList() {
-  final search = _searchController.text.toLowerCase();
+    final filtered = _allClients.where((c) {
+      return c["nombre"].toLowerCase().contains(search) ||
+          c["id"].toLowerCase().contains(search);
+    }).toList();
 
-  if (search.isEmpty) {
-    return const Center(
-      child: Text(
-        "Escribe para buscar un cliente",
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+    if (filtered.isEmpty) {
+      return const Center(child: Text("No se encontraron clientes"));
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: const Color(0xFF5CA8FF),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            child: Row(
+              children: const [
+                Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: Text(
+                      "CLIENTE",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+
+                Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: Text(
+                      "ACCIÓN",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Expanded(
+            child: ListView(
+              children: filtered.map((client) {
+                return Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: Colors.grey.shade300),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 12,
+                            horizontal: 12,
+                          ),
+                          child: Text(
+                            client["nombre"],
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ),
+                      ),
+
+                      Expanded(
+                        flex: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.visibility,
+                              color: Colors.blue,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _selectedClientId = client["id"];
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
       ),
     );
   }
-
-  final filtered = _allClients.where((c) {
-    return c["nombre"].toLowerCase().contains(search) ||
-        c["id"].toLowerCase().contains(search);
-  }).toList();
-
-  if (filtered.isEmpty) {
-    return const Center(child: Text("No se encontraron clientes"));
-  }
-
-  return Container(
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(8),
-      border: Border.all(color: Colors.grey.shade300),
-    ),
-    child: Column(
-      children: [
-        // Encabezados
-        Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFF5CA8FF),
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(8),
-              topRight: Radius.circular(8),
-            ),
-          ),
-          child: Row(
-            children: const [
-              Expanded(
-                flex: 3,
-                child: Padding(
-                  padding: EdgeInsets.all(12.0),
-                  child: Text(
-                    "NOMBRE",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Padding(
-                  padding: EdgeInsets.all(12.0),
-                  child: Text(
-                    "ID",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Padding(
-                  padding: EdgeInsets.all(12.0),
-                  child: Text(
-                    "ACCIÓN",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        // Filas dinámicas
-        Expanded(
-          child: ListView(
-            children: filtered.map((client) {
-              return Container(
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Colors.grey.shade300),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    // Nombre
-                    Expanded(
-                      flex: 3,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 12),
-                        child: Text(
-                          client["nombre"],
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                      ),
-                    ),
-
-                    // ID
-                    Expanded(
-                      flex: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 12),
-                        child: Text(
-                          client["id"],
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                      ),
-                    ),
-
-                    // Botón o icono de ver
-                    Expanded(
-                      flex: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: IconButton(
-                          icon: const Icon(Icons.visibility, color: Colors.blue),
-                          onPressed: () {
-                            setState(() {
-                              _selectedClientId = client["id"];
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
 
   Widget _buildVisitsList() {
     final visits = selectedClient?["visitas"] ?? [];
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              "Cliente: ${selectedClient?["nombre"]}",
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
+          child: Text(
+            "Cliente: ${selectedClient?["nombre"]}",
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
         ),
+
         Expanded(
           child: visits.isEmpty
               ? const Center(child: Text("No tiene visitas registradas"))
-              : ListView(
-                  children: visits.map<Widget>((visit) {
-                    return ListTile(
-                      title: Text("Visita ${visit["id"]}"),
-                      subtitle: Text("Fecha: ${visit["fecha"]}"),
-                      trailing: const Icon(Icons.visibility),
-                      onTap: () => setState(() {
-                        _selectedVisitId = visit["id"];
-                        _showVisitDetail = true;
-                      }),
-                    );
-                  }).toList(),
+              : Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.grey.shade300),
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF5CA8FF),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            topRight: Radius.circular(8),
+                          ),
+                        ),
+                        child: Row(
+                          children: const [
+                            Expanded(
+                              flex: 3,
+                              child: Padding(
+                                padding: EdgeInsets.all(12.0),
+                                child: Text(
+                                  "FECHA",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Padding(
+                                padding: EdgeInsets.all(12.0),
+                                child: Text(
+                                  "ID",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Padding(
+                                padding: EdgeInsets.all(12.0),
+                                child: Text(
+                                  "VER",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Expanded(
+                        child: ListView(
+                          children: visits.map<Widget>((visit) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.grey.shade300,
+                                  ),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 3,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 12,
+                                        horizontal: 12,
+                                      ),
+                                      child: Text(
+                                        DateFormat('dd/MM/yyyy hh:mm a').format(
+                                          DateTime.parse(visit["fecha"]),
+                                        ),
+                                        style: const TextStyle(fontSize: 14),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 12,
+                                        horizontal: 12,
+                                      ),
+                                      child: Text(
+                                        visit["id"],
+                                        style: const TextStyle(fontSize: 14),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: IconButton(
+                                      icon: const Icon(
+                                        Icons.visibility,
+                                        color: Colors.blue,
+                                      ),
+                                      onPressed: () => setState(() {
+                                        _selectedVisitId = visit["id"];
+                                        _showVisitDetail = true;
+                                      }),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
         ),
-        Padding(padding: const EdgeInsets.all(16.0)),
+
+        const SizedBox(height: 16),
+
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: SizedBox(
+            width: double.infinity,
+            child: Button(
+              label: 'Volver',
+              onPressed: () {
+                setState(() {
+                  _selectedClientId = null;
+                  _selectedVisitId = null;
+                  _showVisitDetail = false;
+                  _searchController.clear();
+                });
+              },
+            ),
+          ),
+        ),
+        const SizedBox(height: 24),
       ],
     );
   }
@@ -344,33 +428,22 @@ Widget _buildClientList() {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Detalle de Visita',
-          style: Theme.of(context).textTheme.headlineSmall,
+          // ignore: prefer_interpolation_to_compose_strings
+          'Detalle de la visita ' + visit!["id"],
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
 
         buildVisitTable(
-          fechaHora: visit?["fecha"],
-          observaciones: visit?["observaciones"],
-          vendedor: visit?["vendedor"],
+          fechaHora: DateFormat(
+            'dd/MM/yyyy hh:mm a',
+          ).format(DateTime.parse(visit["fecha"])),
+          observaciones: visit["observaciones"],
+          vendedor: visit["vendedor"],
         ),
         const SizedBox(height: 16),
 
         const SizedBox(height: 32),
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: () {
-              setState(() {
-                _showVisitDetail = false;
-                _selectedVisitId = null;
-                _selectedClientId = null;
-                _searchController.clear();
-              });
-            },
-            child: const Text('Volver'),
-          ),
-        ),
       ],
     );
   }
@@ -380,32 +453,29 @@ Widget _buildClientList() {
     required String observaciones,
     required String vendedor,
   }) {
-    // Helper para cada fila
     Widget buildRow(String campo, String valor) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 6),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Campo
             SizedBox(
-              width: 120, // ancho fijo para alinear
+              width: 120,
               child: Text(
                 campo,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 13,
+                  fontSize: 16,
                 ),
               ),
             ),
 
-            // Valor
             Expanded(
               child: Text(
                 valor,
                 style: const TextStyle(
-                  fontWeight: FontWeight.bold, // AQUÍ VA EL BOLD
-                  fontSize: 13,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 16,
                 ),
               ),
             ),
