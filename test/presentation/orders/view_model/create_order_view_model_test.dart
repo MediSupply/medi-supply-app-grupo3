@@ -5,6 +5,7 @@ import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:medi_supply_app_grupo3/presentation/orders/view_model/create_order_view_model.dart';
 import 'package:medi_supply_app_grupo3/data/repository/entity/client/client.dart';
 import 'package:medi_supply_app_grupo3/data/repository/entity/product/product.dart';
+import 'package:medi_supply_app_grupo3/application/networking/networking.dart';
 
 void main() {
   group('CreateOrderViewModel', () {
@@ -463,10 +464,8 @@ void main() {
       late DioAdapter dioAdapter;
 
       setUp(() {
-        // Setup http_mock_adapter to intercept HTTP calls
-        final mockDio = Dio();
-        mockDio.options.baseUrl = 'http://localhost:9999';
-        dioAdapter = DioAdapter(dio: mockDio);
+        // Setup http_mock_adapter to intercept HTTP calls on Networking.instance.dio
+        dioAdapter = DioAdapter(dio: Networking.instance.dio);
       });
 
       test('should load products successfully', () async {
