@@ -99,5 +99,5 @@ class FeedbackViewModel extends Notifier<FeedbackState> {
     );
   }
 
-  createFeedback() async {}
+  Future<void> createFeedback() async {}
 }
